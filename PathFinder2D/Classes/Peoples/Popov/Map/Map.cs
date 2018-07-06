@@ -54,9 +54,10 @@ namespace PathFinder.Popov {
             }
 
             int nextIndex = startIndex;
+            Segment currentSegment = contour.Segments[nextIndex];
+            bool moveForward = currentSegment.EndPointCloser(_goal);
             do {
-                Segment currentSegment = contour.Segments[nextIndex];
-                _currentPoint = currentSegment.EndPoint;
+                _currentPoint = moveForward ? currentSegment.EndPoint : currentSegment.StartPoint;
                 path.Add(_currentPoint);
                 Vector2? nextIntersection = contour.GetNearestIntersection(_currentPoint, _goal);
                 if (!nextIntersection.HasValue) {
@@ -65,8 +66,14 @@ namespace PathFinder.Popov {
                          break;
                     }
                 }
-                nextIndex++;
-                nextIndex = nextIndex > contour.Segments.Count - 1 ? 0 : nextIndex;
+
+                nextIndex = moveForward ? nextIndex + 1 : nextIndex - 1;
+                if (moveForward) {
+                    nextIndex = nextIndex > contour.Segments.Count - 1 ? 0 : nextIndex;
+                } else {
+                    nextIndex = nextIndex < 0 ? contour.Segments.Count - 1 : nextIndex;
+                }
+                currentSegment = contour.Segments[nextIndex];
             } while (nextIndex != startIndex);
             _excludedContours.Add(contour.Id);
         }

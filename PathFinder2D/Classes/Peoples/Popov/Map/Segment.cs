@@ -29,5 +29,11 @@ namespace PathFinder.Popov {
             float distance2 = Vector2.Distance(_endPoint, point);
             return Math.Abs(distance1 + distance2 - _distance) < 0.00003;
         }
+
+        public bool EndPointCloser(Vector2 goal) {
+            float distance1 = Vector2.Distance(_startPoint, goal);
+            float distance2 = Vector2.Distance(_endPoint, goal);
+            return distance2 < distance1;
+        }
     }
 }

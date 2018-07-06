@@ -48,8 +48,8 @@ namespace PathFinder {
             OnResize();
 
             settings.CurrentFile = file;
-            var path = map.GetPath(start, end).ToList();
-            PathDistanceCalculator.CalculatePathDistance(path);
+            PathDistanceCalculator.Calculate(map, start, end);
+           
         }
 
         protected override void OnLoad(EventArgs e) {
@@ -173,6 +173,7 @@ namespace PathFinder {
                 end = point2;
 
             settings.StartAndEnd = new[] {start, end};
+            PathDistanceCalculator.Calculate(map, start, end);
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
