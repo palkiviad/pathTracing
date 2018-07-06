@@ -6,8 +6,8 @@ using PathFinder.Popov;
 
 namespace PathFinder2D.Classes.Peoples.Popov.Help {
     public static class Utils {
-        
-        
+
+
         public static List<IntersectedContour> GetIntersectedContours(Vector2 start, Vector2 goal, Contour[] contours) {
             if (contours == null) throw new ArgumentNullException(nameof(contours));
             var result = new List<IntersectedContour>();
@@ -29,11 +29,14 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
                 if (newSign == 0) {
                     continue;
                 }
+
                 if (sign != 0 && newSign != sign) {
                     return false;
                 }
+
                 sign = newSign;
             }
+
             return true;
         }
 
@@ -42,6 +45,7 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
             if (Math.Abs(value) < float.Epsilon) {
                 return 0;
             }
+
             return Math.Sign(value);
         }
     }

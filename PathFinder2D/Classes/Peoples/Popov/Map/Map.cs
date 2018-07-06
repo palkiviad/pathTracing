@@ -35,7 +35,6 @@ namespace PathFinder.Popov {
                 if (intersectedContours.Count == 0) {
                     break;
                 }
-
                 intersectedContours.Sort(SortByDistance);
                 var contour = intersectedContours.FirstOrDefault(item => _excludedContours.IndexOf(item.Contour.Id) < 0);
                 if (contour == null) {

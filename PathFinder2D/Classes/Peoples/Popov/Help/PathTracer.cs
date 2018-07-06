@@ -33,11 +33,13 @@ namespace PathFinder.Peoples.Popov.Help {
                 _currentPoint = moveForward ? currentSegment.EndPoint : currentSegment.StartPoint;
                 TryRemovePreviousPoint(path);
                 path.Add(_currentPoint);
-                Vector2? nextIntersection = contour.GetNearestIntersection(_currentPoint, _goal);
-                if (!nextIntersection.HasValue) {
-                    var intersectedContours = Utils.GetIntersectedContours(_currentPoint, _goal, _contours);
-                    if (intersectedContours.All(item => _excludedContours.IndexOf(item.Contour.Id) < 0)) {
-                        break;
+                if (Utils.ContourLayInSameHalfPlane(_currentContour, new Segment(_currentPoint, _goal))) {
+                    Vector2? nextIntersection = contour.GetNearestIntersection(_currentPoint, _goal);
+                    if (!nextIntersection.HasValue) {
+                        var intersectedContours = Utils.GetIntersectedContours(_currentPoint, _goal, _contours);
+                        if (intersectedContours.All(item => _excludedContours.IndexOf(item.Contour.Id) < 0)) {
+                            break;
+                        }
                     }
                 }
 
@@ -62,7 +64,7 @@ namespace PathFinder.Peoples.Popov.Help {
                 var intersected = Utils.GetIntersectedContours(previous, _currentPoint, _contours);
                 if (intersected.Count == 0) {
                     if (!(_currentContour.HasPoint(previous) && _currentContour.HasPoint(last)) ||
-                    (Utils.ContourLayInSameHalfPlane(_currentContour, new Segment(_currentPoint, previous)))) {
+                        (Utils.ContourLayInSameHalfPlane(_currentContour, new Segment(_currentPoint, previous)))) {
                         path.Remove(last);
                     }
                 }

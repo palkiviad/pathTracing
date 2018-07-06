@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Windows;
 using PathFinder.Mathematics;
 using PathFinder.Popov;
 
 namespace PathFinder2D.Classes.Peoples.Popov.Help {
     public class Contour {
         private List<Segment> _segments;
+        private List<Vector2> _vertices;
         private static int _uniqueId = 1;
         private int _id;
 
@@ -20,10 +23,14 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
             Id = _uniqueId;
             _uniqueId++;
             _segments = new List<Segment>();
+            _vertices = new List<Vector2>();
             for (int i = 0; i < vertices.Length - 1; i++) {
-                _segments.Add(new Segment(vertices[i], vertices[i+1]));
+                _vertices.Add(vertices[i]);
+                _segments.Add(new Segment(vertices[i], vertices[i + 1]));
             }
-            _segments.Add(new Segment(vertices[vertices.Length-1], vertices[0]));
+
+            _segments.Add(new Segment(vertices[vertices.Length - 1], vertices[0]));
+            _vertices.Add(vertices[vertices.Length - 1]);
         }
 
         public Vector2? GetNearestIntersection(Vector2 start, Vector2 end) {
@@ -39,8 +46,10 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
                     }
                 }
             }
+
             return result;
         }
+
 
         public static void ResetId() {
             _uniqueId = 0;
