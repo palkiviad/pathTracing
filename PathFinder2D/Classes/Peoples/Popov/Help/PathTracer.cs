@@ -25,6 +25,7 @@ namespace PathFinder.Peoples.Popov.Help {
             if (startIndex < 0) {
                 throw new Exception("Can't find segment for current point!");
             }
+
             int nextIndex = startIndex;
             Segment currentSegment = contour.Segments[nextIndex];
             bool moveForward = currentSegment.EndPointCloser(_goal);
@@ -39,6 +40,7 @@ namespace PathFinder.Peoples.Popov.Help {
                         break;
                     }
                 }
+
                 nextIndex = moveForward ? nextIndex + 1 : nextIndex - 1;
                 if (moveForward) {
                     nextIndex = nextIndex > contour.Segments.Count - 1 ? 0 : nextIndex;
@@ -48,6 +50,7 @@ namespace PathFinder.Peoples.Popov.Help {
 
                 currentSegment = contour.Segments[nextIndex];
             } while (nextIndex != startIndex);
+
             _excludedContours.Add(contour.Id);
             return _currentPoint;
         }
@@ -58,7 +61,8 @@ namespace PathFinder.Peoples.Popov.Help {
                 var last = path[path.Count - 1];
                 var intersected = Utils.GetIntersectedContours(previous, _currentPoint, _contours);
                 if (intersected.Count == 0) {
-                    if (!(_currentContour.HasPoint(previous) && _currentContour.HasPoint(last))) {
+                    if (!(_currentContour.HasPoint(previous) && _currentContour.HasPoint(last)) ||
+                    (Utils.ContourLayInSameHalfPlane(_currentContour, new Segment(_currentPoint, previous)))) {
                         path.Remove(last);
                     }
                 }
