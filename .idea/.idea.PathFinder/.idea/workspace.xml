@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4472dc21-4258-41a9-96df-8b90c646649b" name="Default" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="App.config" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PathFinder/App.config">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AssemblyInfo.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PathFinder/Properties/AssemblyInfo.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <marker date="1516455090000" expanded="false" signature="6:147" ph="..." />
+                <marker date="1516455090000" expanded="true" signature="149:335" ph="/* General Information about an assembly is controlled through the following ... */" />
+                <marker date="1516455090000" expanded="true" signature="642:850" ph="/* Setting ComVisible to false makes the types in this assembly not visible ... */" />
+                <marker date="1516455090000" expanded="true" signature="882:1382" ph="/* In order to begin building localizable applications, set ... */" />
+                <marker date="1516455090000" expanded="true" signature="1385:1806" ph="[assembly]" />
+                <marker date="1516455090000" expanded="true" signature="1444:1597" ph="/* where theme specific resource dictionaries are located ... */" />
+                <marker date="1516455090000" expanded="true" signature="1644:1803" ph="/* where the generic resource dictionary is located ... */" />
+                <marker date="1516455090000" expanded="true" signature="1809:2134" ph="/* Version information for an assembly consists of the following four values: ... */" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Main.cs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/PathFinder/Main.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="422">
+              <caret line="61" column="46" lean-forward="false" selection-start-line="61" selection-start-column="46" selection-end-line="61" selection-end-column="46" />
+              <folding>
+                <marker date="1516458392000" expanded="true" signature="0:446" ph="/* C## example program to demonstrate OpenTK ... */" />
+                <marker date="1516458392000" expanded="false" signature="454:548" ph="..." />
+                <marker date="1516458392000" expanded="true" signature="570:2671" ph="{...}" />
+                <marker date="1516458392000" expanded="true" signature="600:2669" ph="{...}" />
+                <marker date="1516458392000" expanded="true" signature="694:748" ph="{...}" />
+                <marker date="1516458392000" expanded="true" signature="801:945" ph="{...}" />
+                <marker date="1516458392000" expanded="true" signature="1000:1382" ph="{...}" />
+                <marker date="1516458392000" expanded="true" signature="1447:1565" ph="{...}" />
+                <marker date="1516458392000" expanded="true" signature="1630:2269" ph="{...}" />
+                <marker date="1516458392000" expanded="true" signature="2325:2663" ph="{...}" />
+                <marker date="1516458392000" expanded="true" signature="2348:2550" ph="/* The 'using' idiom guarantees proper resource cleanup. ... */" />
+                <marker date="1516458392000" expanded="true" signature="2593:2653" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GameWindow.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/13EA682C-B9AE-4235-92AE-224FEF4E939E/6f/a437aa39/GameWindow.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="7242">
+              <caret line="426" column="28" lean-forward="false" selection-start-line="426" selection-start-column="23" selection-end-line="426" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Contour.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PathFinder/Finder/Contour.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" column="8" lean-forward="false" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
+              <folding>
+                <marker date="1516458362000" expanded="true" signature="54:301" ph="{...}" />
+                <marker date="1516458362000" expanded="true" signature="183:286" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BoundingCircle.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PathFinder/Finder/BoundingCircle.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="31" lean-forward="false" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="31" />
+              <folding>
+                <marker date="1516458392000" expanded="true" signature="76:939" ph="{...}" />
+                <marker date="1516458392000" expanded="true" signature="202:806" ph="{...}" />
+                <marker date="1516458392000" expanded="true" signature="415:651" ph="{...}" />
+                <marker date="1516458392000" expanded="true" signature="851:933" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>MatrixMode</find>
+      <find>Mouse</find>
+    </findStrings>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/13EA682C-B9AE-4235-92AE-224FEF4E939E/6f/a437aa39/GameWindow.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/PathFinder/App.config" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/PathFinder/Finder/BoundingCircle.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/PathFinder/Finder/Contour.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/PathFinder/Main.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/PathFinder/Math/Vector2.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/PathFinder/Properties/AssemblyInfo.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/PathFinder/Math/Vector2.cs" />
+        <option value="$PROJECT_DIR$/PathFinder/Finder/BoundingCircle.cs" />
+        <option value="$PROJECT_DIR$/PathFinder/Finder/Contour.cs" />
+        <option value="$PROJECT_DIR$/PathFinder/Main.cs" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="260" />
+    <option name="y" value="20" />
+    <option name="width" value="1400" />
+    <option name="height" value="1000" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="SolutionExplorer" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="SolutionExplorer">
+        <subPane>
+          <expand>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="PathFinder (1 project)" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+        <option name="show-file-system" value="false" />
+        <option name="show-all-items" value="false" />
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../PathFinder2D/PathFinder2D.sln" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="Default" type="DotNetProject" factoryName=".NET Project">
+      <option name="EXE_PATH" value="$PROJECT_DIR$/PathFinder/bin/Debug/PathFinder.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/PathFinder/bin/Debug" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <envs />
+      <option name="USE_MONO" value="0" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/PathFinder/PathFinder.csproj" />
+      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+      <option name="PROJECT_KIND" value="Console" />
+      <option name="PROJECT_TFM" value=".NETFramework,Version=v4.6.2" />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4472dc21-4258-41a9-96df-8b90c646649b" name="Default" comment="" />
+      <created>1516455082637</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1516455082637</updated>
+      <workItem from="1516455084285" duration="3149000" />
+      <workItem from="1517130684701" duration="65000" />
+      <workItem from="1517131017259" duration="119000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="3333000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Errors In Solution" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Unit Tests" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30965006" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18020834" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/PathFinder/App.config">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/Properties/AssemblyInfo.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1516455090000" expanded="false" signature="6:147" ph="..." />
+            <marker date="1516455090000" expanded="true" signature="149:335" ph="/* General Information about an assembly is controlled through the following ... */" />
+            <marker date="1516455090000" expanded="true" signature="642:850" ph="/* Setting ComVisible to false makes the types in this assembly not visible ... */" />
+            <marker date="1516455090000" expanded="true" signature="882:1382" ph="/* In order to begin building localizable applications, set ... */" />
+            <marker date="1516455090000" expanded="true" signature="1385:1806" ph="[assembly]" />
+            <marker date="1516455090000" expanded="true" signature="1444:1597" ph="/* where theme specific resource dictionaries are located ... */" />
+            <marker date="1516455090000" expanded="true" signature="1644:1803" ph="/* where the generic resource dictionary is located ... */" />
+            <marker date="1516455090000" expanded="true" signature="1809:2134" ph="/* Version information for an assembly consists of the following four values: ... */" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/13EA682C-B9AE-4235-92AE-224FEF4E939E/6f/a437aa39/GameWindow.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7242">
+          <caret line="426" column="28" lean-forward="false" selection-start-line="426" selection-start-column="23" selection-end-line="426" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/Finder/Contour.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="8" lean-forward="false" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
+          <folding>
+            <marker date="1516458362000" expanded="true" signature="54:301" ph="{...}" />
+            <marker date="1516458362000" expanded="true" signature="183:286" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/Finder/BoundingCircle.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="31" lean-forward="false" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="31" />
+          <folding>
+            <marker date="1516458392000" expanded="true" signature="76:939" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="202:806" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="415:651" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="851:933" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/Main.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="799">
+          <caret line="51" column="37" lean-forward="true" selection-start-line="51" selection-start-column="37" selection-end-line="51" selection-end-column="37" />
+          <folding>
+            <marker date="1516458392000" expanded="true" signature="0:446" ph="/* C## example program to demonstrate OpenTK ... */" />
+            <marker date="1516458392000" expanded="false" signature="454:548" ph="..." />
+            <marker date="1516458392000" expanded="true" signature="570:2671" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="600:2669" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="694:748" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="801:945" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="1000:1382" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="1447:1565" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="1630:2269" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="2325:2663" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="2348:2550" ph="/* The 'using' idiom guarantees proper resource cleanup. ... */" />
+            <marker date="1516458392000" expanded="true" signature="2593:2653" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/App.config">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/Properties/AssemblyInfo.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1516455090000" expanded="false" signature="6:147" ph="..." />
+            <marker date="1516455090000" expanded="true" signature="149:335" ph="/* General Information about an assembly is controlled through the following ... */" />
+            <marker date="1516455090000" expanded="true" signature="642:850" ph="/* Setting ComVisible to false makes the types in this assembly not visible ... */" />
+            <marker date="1516455090000" expanded="true" signature="882:1382" ph="/* In order to begin building localizable applications, set ... */" />
+            <marker date="1516455090000" expanded="true" signature="1385:1806" ph="[assembly]" />
+            <marker date="1516455090000" expanded="true" signature="1444:1597" ph="/* where theme specific resource dictionaries are located ... */" />
+            <marker date="1516455090000" expanded="true" signature="1644:1803" ph="/* where the generic resource dictionary is located ... */" />
+            <marker date="1516455090000" expanded="true" signature="1809:2134" ph="/* Version information for an assembly consists of the following four values: ... */" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/13EA682C-B9AE-4235-92AE-224FEF4E939E/6f/a437aa39/GameWindow.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7242">
+          <caret line="426" column="28" lean-forward="false" selection-start-line="426" selection-start-column="23" selection-end-line="426" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/Finder/Contour.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="8" lean-forward="false" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
+          <folding>
+            <marker date="1516458362000" expanded="true" signature="54:301" ph="{...}" />
+            <marker date="1516458362000" expanded="true" signature="183:286" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/Finder/BoundingCircle.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="31" lean-forward="false" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="31" />
+          <folding>
+            <marker date="1516458392000" expanded="true" signature="76:939" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="202:806" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="415:651" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="851:933" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/Main.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="901">
+          <caret line="53" column="9" lean-forward="true" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
+          <folding>
+            <marker date="1516458392000" expanded="true" signature="0:446" ph="/* C## example program to demonstrate OpenTK ... */" />
+            <marker date="1516458392000" expanded="false" signature="454:548" ph="..." />
+            <marker date="1516458392000" expanded="true" signature="570:2671" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="600:2669" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="694:748" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="801:945" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="1000:1382" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="1447:1565" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="1630:2269" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="2325:2663" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="2348:2550" ph="/* The 'using' idiom guarantees proper resource cleanup. ... */" />
+            <marker date="1516458392000" expanded="true" signature="2593:2653" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/MainWindow.xaml" />
+    <entry file="file://$PROJECT_DIR$/PathFinder/MainWindow.xaml.cs" />
+    <entry file="file://$PROJECT_DIR$/PathFinder/App.xaml.cs" />
+    <entry file="file://$PROJECT_DIR$/PathFinder/Properties/AssemblyInfo.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1516455090000" expanded="false" signature="6:147" ph="..." />
+            <marker date="1516455090000" expanded="true" signature="149:335" ph="/* General Information about an assembly is controlled through the following ... */" />
+            <marker date="1516455090000" expanded="true" signature="642:850" ph="/* Setting ComVisible to false makes the types in this assembly not visible ... */" />
+            <marker date="1516455090000" expanded="true" signature="882:1382" ph="/* In order to begin building localizable applications, set ... */" />
+            <marker date="1516455090000" expanded="true" signature="1385:1806" ph="[assembly]" />
+            <marker date="1516455090000" expanded="true" signature="1444:1597" ph="/* where theme specific resource dictionaries are located ... */" />
+            <marker date="1516455090000" expanded="true" signature="1644:1803" ph="/* where the generic resource dictionary is located ... */" />
+            <marker date="1516455090000" expanded="true" signature="1809:2134" ph="/* Version information for an assembly consists of the following four values: ... */" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OpenTK/OpenTK/Graphics/OpenGL4/ErrorHelper.cs" />
+    <entry file="file://$PROJECT_DIR$/OpenTK/OpenTK/Graphics/ES11/ErrorHelper.cs" />
+    <entry file="file://$PROJECT_DIR$/OpenTK/OpenTK/Graphics/ES11/Helper.cs" />
+    <entry file="file://$PROJECT_DIR$/OpenTK/OpenTK.GLWidget/GLWidget.cs" />
+    <entry file="file://$PROJECT_DIR$/PathFinder/App.config">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/Math/Vector2.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="293">
+          <caret line="228" column="0" lean-forward="true" selection-start-line="228" selection-start-column="0" selection-end-line="228" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/Finder/BoundingCircle.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="31" lean-forward="false" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="31" />
+          <folding>
+            <marker date="1516458392000" expanded="true" signature="76:939" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="202:806" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="415:651" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="851:933" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/Finder/Contour.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="8" lean-forward="false" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
+          <folding>
+            <marker date="1516458362000" expanded="true" signature="54:301" ph="{...}" />
+            <marker date="1516458362000" expanded="true" signature="183:286" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/13EA682C-B9AE-4235-92AE-224FEF4E939E/6f/a437aa39/GameWindow.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7242">
+          <caret line="426" column="28" lean-forward="false" selection-start-line="426" selection-start-column="23" selection-end-line="426" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PathFinder/Main.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="422">
+          <caret line="61" column="46" lean-forward="false" selection-start-line="61" selection-start-column="46" selection-end-line="61" selection-end-column="46" />
+          <folding>
+            <marker date="1516458392000" expanded="true" signature="0:446" ph="/* C## example program to demonstrate OpenTK ... */" />
+            <marker date="1516458392000" expanded="false" signature="454:548" ph="..." />
+            <marker date="1516458392000" expanded="true" signature="570:2671" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="600:2669" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="694:748" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="801:945" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="1000:1382" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="1447:1565" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="1630:2269" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="2325:2663" ph="{...}" />
+            <marker date="1516458392000" expanded="true" signature="2348:2550" ph="/* The 'using' idiom guarantees proper resource cleanup. ... */" />
+            <marker date="1516458392000" expanded="true" signature="2593:2653" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\p.popov\.Rider2017.3\system\resharper-host\local\Transient\ReSharperHost\v11\SolutionCaches\_PathFinder2D.1519564411.00" t="ExcludeRecursive" />
+    <e p="C:\Users\p.popov\Desktop\PathFinder2D" t="IncludeFlat">
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="PathFinder2D" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Classes" t="Include">
+          <e p="Editor" t="Include">
+            <e p="InternalBox.cs" t="Include" />
+            <e p="InternalObstacle.cs" t="Include" />
+            <e p="InternalObstaclesCollection.cs" t="Include" />
+            <e p="InternalSettings.cs" t="Include" />
+          </e>
+          <e p="Glu.cs" t="Include" />
+          <e p="IMap.cs" t="Include" />
+          <e p="Main.cs" t="Include" />
+          <e p="Mathematics" t="Include">
+            <e p="Vector2.cs" t="Include" />
+          </e>
+          <e p="Peoples" t="Include">
+            <e p="Pavlenko" t="Include">
+              <e p="Map" t="Include">
+                <e p="Map.cs" t="Include" />
+              </e>
+            </e>
+            <e p="Popov" t="Include">
+              <e p="Map" t="Include">
+                <e p="Contour.cs" t="Include" />
+                <e p="Map.cs" t="Include" />
+                <e p="Segment.cs" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
+        <e p="Data" t="Include">
+          <e p="map1.txt" t="Include" />
+          <e p="map2.txt" t="Include" />
+          <e p="map3.txt" t="Include" />
+          <e p="map4.txt" t="Include" />
+          <e p="Settings.dat" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="PathFinder2D.csproj" t="IncludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="Resources.Designer.cs" t="Include" />
+          <e p="Resources.resx" t="Include" />
+        </e>
+      </e>
+      <e p="PathFinder2D.sln" t="IncludeFlat" />
+    </e>
+  </component>
+</project>
