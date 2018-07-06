@@ -66,6 +66,7 @@
     <Compile Include="Classes\Peoples\Popov\Map\Contour.cs" />
     <Compile Include="Classes\Peoples\Popov\Map\Map.cs" />
     <Compile Include="Classes\Peoples\Popov\Map\Segment.cs" />
+    <Compile Include="Classes\Peoples\Popov\Test\PathDistanceCalculator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

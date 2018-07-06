@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using PathFinder.Editor;
+using PathFinder.Peoples.Popov.Test;
 using Vector2 = PathFinder.Mathematics.Vector2;
 
 namespace PathFinder {
@@ -41,10 +43,13 @@ namespace PathFinder {
 
             obstaclesCollection = new InternalObstaclesCollection(file);
             map.Init(obstaclesCollection.Data);
+            
 
             OnResize();
 
             settings.CurrentFile = file;
+            var path = map.GetPath(start, end).ToList();
+            PathDistanceCalculator.CalculatePathDistance(path);
         }
 
         protected override void OnLoad(EventArgs e) {
@@ -64,6 +69,7 @@ namespace PathFinder {
             GL.Disable(EnableCap.DepthTest);
 
             LoadFile(settings.CurrentFile);
+            
         }
 
         protected override void OnResize(EventArgs e) {

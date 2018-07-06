@@ -32,6 +32,9 @@
                 <e p="Map.cs" t="Include" />
                 <e p="Segment.cs" t="Include" />
               </e>
+              <e p="Test" t="Include">
+                <e p="PathDistanceCalculator.cs" t="Include" />
+              </e>
             </e>
           </e>
         </e>
