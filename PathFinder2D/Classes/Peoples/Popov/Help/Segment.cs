@@ -1,7 +1,7 @@
 ﻿using System;
 using PathFinder.Mathematics;
 
-namespace PathFinder.Popov {
+namespace PathFinder2D.Classes.Peoples.Popov.Help {
     public class Segment {
         private Vector2 _startPoint;
 

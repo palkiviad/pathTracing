@@ -63,9 +63,11 @@
     <Compile Include="Classes\Main.cs" />
     <Compile Include="Classes\Mathematics\Vector2.cs" />
     <Compile Include="Classes\Peoples\Pavlenko\Map\Map.cs" />
-    <Compile Include="Classes\Peoples\Popov\Map\Contour.cs" />
+    <Compile Include="Classes\Peoples\Popov\Help\Contour.cs" />
+    <Compile Include="Classes\Peoples\Popov\Help\PathTracer.cs" />
+    <Compile Include="Classes\Peoples\Popov\Help\Segment.cs" />
+    <Compile Include="Classes\Peoples\Popov\Help\Utils.cs" />
     <Compile Include="Classes\Peoples\Popov\Map\Map.cs" />
-    <Compile Include="Classes\Peoples\Popov\Map\Segment.cs" />
     <Compile Include="Classes\Peoples\Popov\Test\PathDistanceCalculator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

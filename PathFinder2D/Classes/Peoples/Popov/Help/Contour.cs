@@ -1,9 +1,9 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using PathFinder.Mathematics;
+using PathFinder.Popov;
 
-namespace PathFinder.Popov {
+namespace PathFinder2D.Classes.Peoples.Popov.Help {
     public class Contour {
         private List<Segment> _segments;
         private static int _uniqueId = 1;
@@ -44,6 +44,10 @@ namespace PathFinder.Popov {
 
         public static void ResetId() {
             _uniqueId = 0;
+        }
+
+        public bool HasPoint(Vector2 point) {
+            return _segments.Any(item => item.ContainsPoint(point));
         }
     }
 }
