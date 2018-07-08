@@ -14,7 +14,7 @@ using Vector2 = PathFinder.Mathematics.Vector2;
 
 namespace PathFinder {
     internal sealed class Game : GameWindow {
-        private readonly IMap map = new Popov.Map();
+        private readonly IMap map = new Popov.MapV2();
         private InternalObstaclesCollection obstaclesCollection;
         private readonly InternalSettings settings = new InternalSettings();
 

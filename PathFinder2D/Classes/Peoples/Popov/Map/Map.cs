@@ -3,84 +3,65 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using PathFinder.Mathematics;
-using PathFinder.Peoples.Popov.Help;
+using PathFinder.Peoples.Popov.Clasters;
 using PathFinder2D.Classes.Peoples.Popov.Help;
 
 namespace PathFinder.Popov {
-    public class Map : IMap {
-        private Contour[] contours;
+    public class MapV2 : IMap {
+        private List<IPolygon> polygons;
         private Vector2 currentPoint;
         private Vector2 goal;
-        private List<int> excludedContours;
-        private PathTracer tracer;
+        private List<int> excludedPolygons;
+        private PathTracerV2 tracer;
         
         private readonly Stopwatch stopwatch = new Stopwatch();
         private int calculateCount;
         
-
         public void Init(Vector2[][] obstacles) {
-            contours = new Contour[obstacles.Length];
-            Contour.ResetId();
+            polygons = new List<IPolygon>();
+            Polygon.ResetId();
             for (int i = 0; i < obstacles.Length; i++) {
-                contours[i] = new Contour(obstacles[i]);
+                polygons.Add(new Polygon(obstacles[i]));
             }
         }
-        
 
         public IEnumerable<Vector2> GetPath(Vector2 start, Vector2 end) {
             stopwatch.Start();
             calculateCount++;
-            excludedContours = new List<int>();
+            excludedPolygons = new List<int>();
             var result = new List<Vector2>();
             currentPoint = start;
             goal = end;
-            tracer = new PathTracer(contours, goal, excludedContours);
+            tracer = new PathTracerV2(polygons, goal, excludedPolygons);
             do {
                 result.Add(currentPoint);
-                List<IntersectedContour> intersectedContours = Utils.GetIntersectedContours(currentPoint, goal, contours);
+                var intersectedContours = Utils.GetIntersectedPolygons(currentPoint, goal, polygons);
                 if (intersectedContours.Count == 0) {
                     break;
                 }
                 intersectedContours.Sort(SortByDistance);
-                var contour = intersectedContours.FirstOrDefault(item => excludedContours.IndexOf(item.Contour.Id) < 0);
+                var contour = intersectedContours.FirstOrDefault(item => excludedPolygons.IndexOf(item.Polygon.GetId()) < 0);
                 if (contour == null) {
                     throw new Exception("Can't find path because all contoures are excluded!");
                 }
-                currentPoint = contour.IntersectionPoint;
+                currentPoint = contour.Intersection;
                 result.Add(currentPoint);
-                currentPoint = tracer.Trace(currentPoint, result, contour.Contour);
+                currentPoint = tracer.Trace(currentPoint, result, contour.Polygon);
             } while (true);
 
             result.Add(goal);
             stopwatch.Stop();
-            if (calculateCount % 2 == 0) {
+            if (calculateCount % 50 == 0) {
                 Console.WriteLine("calculate count is {0} ", calculateCount);
                 Console.WriteLine("average time is {0}", stopwatch.Elapsed.TotalMilliseconds /calculateCount);
             }
             return result;
         }
         
-        private int SortByDistance(IntersectedContour x, IntersectedContour y) {
-            float distance1 = Vector2.Distance(currentPoint, x.IntersectionPoint);
-            float distance2 = Vector2.Distance(currentPoint, y.IntersectionPoint);
+        private int SortByDistance(Utils.PolygonIntersection x, Utils.PolygonIntersection y) {
+            float distance1 = Vector2.Distance(currentPoint, x.Intersection);
+            float distance2 = Vector2.Distance(currentPoint, y.Intersection);
             return (int) (distance1 - distance2);
         }
     }
-
-    public class IntersectedContour {
-        private Contour _contour;
-
-        public Contour Contour => _contour;
-
-        public Vector2 IntersectionPoint => _intersectionPoint;
-
-        private Vector2 _intersectionPoint;
-
-
-        public IntersectedContour(Contour contour, Vector2 intersectionPoint) {
-            _contour = contour;
-            _intersectionPoint = intersectionPoint;
-        }
-    }
-
 }

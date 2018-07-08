@@ -63,7 +63,10 @@
     <Compile Include="Classes\Main.cs" />
     <Compile Include="Classes\Mathematics\Vector2.cs" />
     <Compile Include="Classes\Peoples\Pavlenko\Map\Map.cs" />
-    <Compile Include="Classes\Peoples\Popov\Help\Contour.cs" />
+    <Compile Include="Classes\Peoples\Popov\Clasters\PolygonsCluster.cs" />
+    <Compile Include="Classes\Peoples\Popov\Clasters\IPolygon.cs" />
+    <Compile Include="Classes\Peoples\Popov\Clasters\Polygon.cs" />
+    <Compile Include="Classes\Peoples\Popov\Help\ContoursCollection.cs" />
     <Compile Include="Classes\Peoples\Popov\Help\PathTracer.cs" />
     <Compile Include="Classes\Peoples\Popov\Help\Segment.cs" />
     <Compile Include="Classes\Peoples\Popov\Help\Utils.cs" />
@@ -86,6 +89,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Classes\Peoples\Popov\Test\Results.txt" />
     <Content Include="Data\map1.txt" />
     <Content Include="Data\map2.txt" />
     <Content Include="Data\map3.txt" />
