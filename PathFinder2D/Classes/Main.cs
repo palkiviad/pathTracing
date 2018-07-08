@@ -48,7 +48,7 @@ namespace PathFinder {
             OnResize();
 
             settings.CurrentFile = file;
-            PathDistanceCalculator.Calculate(map, start, end);
+            ///PathDistanceCalculator.Calculate(map, start, end);
            
         }
 
@@ -173,7 +173,7 @@ namespace PathFinder {
                 end = point2;
 
             settings.StartAndEnd = new[] {start, end};
-            PathDistanceCalculator.Calculate(map, start, end);
+            //PathDistanceCalculator.Calculate(map, start, end);
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
@@ -220,7 +220,7 @@ namespace PathFinder {
                 //stopwatch.Start();
                 IEnumerable<Vector2> path = map.GetPath(start, end);
                 //stopwatch.Stop();    
-                //Console.WriteLine("Time elapsed (ms): {0}", stopwatch.Elapsed.TotalMilliseconds);
+                //Console.WriteLine("Time elapsed (ms): {0}", stopwatch.Elapsed.Milliseconds);
 
 
 

@@ -62,5 +62,13 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
 
             return false;
         }
+
+        public static float CalculatePathDistance(IList<Vector2> path) {
+            float fullPath = 0;
+            for (int i = 0; i < path.Count - 1; i++) {
+                fullPath += Vector2.Distance(path[i], path[i + 1]);
+            }
+            return fullPath;
+        }
     }
 }

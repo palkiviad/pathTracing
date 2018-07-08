@@ -90,6 +90,7 @@
     <Content Include="Data\map2.txt" />
     <Content Include="Data\map3.txt" />
     <Content Include="Data\map4.txt" />
+    <Content Include="Data\map5.txt" />
     <Content Include="Data\Settings.dat" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

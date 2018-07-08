@@ -18,60 +18,75 @@ namespace PathFinder.Peoples.Popov.Help {
             _excludedContours = excludedContours;
         }
 
-        public Vector2 Trace(Vector2 currentPoint, IList<Vector2> path, Contour contour) {
-            _currentPoint = currentPoint;
+        public Vector2 Trace(Vector2 currentPoint, List<Vector2> path, Contour contour) {
             _currentContour = contour;
-            var startIndex = GetNearestSegmentIndex(contour);
+            var startIndex = GetNearestSegmentIndex(_currentContour, currentPoint);
             if (startIndex < 0) {
                 throw new Exception("Can't find segment for current point!");
             }
 
+            List<Vector2> forwardPath = GetTracedSubPath(startIndex, true, path);
+            List<Vector2> backPath = GetTracedSubPath(startIndex, false, path);
+            _excludedContours.Add(_currentContour.Id);
+            float forwardDistance = Utils.CalculatePathDistance(forwardPath);
+            float backDistance = Utils.CalculatePathDistance(backPath);
+            bool forwardValuableEffective = forwardDistance / backDistance < 0.99f;
+            List<Vector2> shortestPath = forwardValuableEffective ? forwardPath : backPath;
+            path.RemoveAt(path.Count -1);
+            path.AddRange(shortestPath.GetRange(1, shortestPath.Count - 1));
+            return path.Last();
+        }
+
+        private List<Vector2> GetTracedSubPath(int startIndex, bool moveForward, List<Vector2> path) {
+            if (path.Count < 2) {
+                throw  new Exception("path has to be longer!");
+            }
+
+            var subPath = path.GetRange(path.Count - 2, 2);
             int nextIndex = startIndex;
-            Segment currentSegment = contour.Segments[nextIndex];
-            bool moveForward = currentSegment.EndPointCloser(_goal);
+            Segment currentSegment = _currentContour.Segments[nextIndex];
             do {
-                _currentPoint = moveForward ? currentSegment.EndPoint : currentSegment.StartPoint;
-                TryRemovePreviousPoint(path);
-                path.Add(_currentPoint);
-                Vector2? nextIntersection = contour.GetNearestIntersection(_currentPoint, _goal);
-                if (!nextIntersection.HasValue && !Utils.ContourVerticesLayOnSegment(new Segment(_currentPoint, _goal),contour)) {
-                    var intersectedContours = Utils.GetIntersectedContours(_currentPoint, _goal, _contours);
+                
+                Vector2 nextPoint = moveForward ? currentSegment.EndPoint : currentSegment.StartPoint;
+                TryRemovePreviousPoint(subPath, nextPoint);
+                subPath.Add(nextPoint);
+                Vector2? nextIntersection = _currentContour.GetNearestIntersection(nextPoint, _goal);
+                if (!nextIntersection.HasValue && !Utils.ContourVerticesLayOnSegment(new Segment(nextPoint, _goal),_currentContour)) {
+                    var intersectedContours = Utils.GetIntersectedContours(nextPoint, _goal, _contours);
                     if (intersectedContours.All(item => _excludedContours.IndexOf(item.Contour.Id) < 0)) {
                         break;
                     }
                 }
                 nextIndex = moveForward ? nextIndex + 1 : nextIndex - 1;
                 if (moveForward) {
-                    nextIndex = nextIndex > contour.Segments.Count - 1 ? 0 : nextIndex;
+                    nextIndex = nextIndex > _currentContour.Segments.Count - 1 ? 0 : nextIndex;
                 } else {
-                    nextIndex = nextIndex < 0 ? contour.Segments.Count - 1 : nextIndex;
+                    nextIndex = nextIndex < 0 ? _currentContour.Segments.Count - 1 : nextIndex;
                 }
 
-                currentSegment = contour.Segments[nextIndex];
+                currentSegment = _currentContour.Segments[nextIndex];
             } while (nextIndex != startIndex);
-
-            _excludedContours.Add(contour.Id);
-            return _currentPoint;
+            return subPath;
         }
 
-        private void TryRemovePreviousPoint(IList<Vector2> path) {
+        private void TryRemovePreviousPoint(IList<Vector2> path, Vector2 currentPoint) {
             if (path.Count > 1) {
                 var previous = path[path.Count - 2];
                 var last = path[path.Count - 1];
-                var intersected = Utils.GetIntersectedContours(previous, _currentPoint, _contours);
+                var intersected = Utils.GetIntersectedContours(previous, currentPoint, _contours);
                 if (intersected.Count == 0) {
                     if (!(_currentContour.HasPoint(previous) && _currentContour.HasPoint(last)) ||
-                        Utils.ContourLayInSameHalfPlane(_currentContour, new Segment(_currentPoint, previous))) {
+                        Utils.ContourLayInSameHalfPlane(_currentContour, new Segment(currentPoint, previous))) {
                         path.Remove(last);
                     }
                 }
             }
         }
 
-        private int GetNearestSegmentIndex(Contour contour) {
+        private int GetNearestSegmentIndex(Contour contour, Vector2 currentPoint) {
             int startIndex = -1;
             for (int i = 0; i < contour.Segments.Count; i++) {
-                if (contour.Segments[i].ContainsPoint(_currentPoint)) {
+                if (contour.Segments[i].ContainsPoint(currentPoint)) {
                     startIndex = i;
                     break;
                 }

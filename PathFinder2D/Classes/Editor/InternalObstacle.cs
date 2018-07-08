@@ -42,7 +42,7 @@ namespace PathFinder.Editor {
                 Vector2 edgeStart = vertices[i];
                 Vector2 edgeEnd = vertices[i+1 == vertices.Length  ? 0 : i+1];
 
-               if(Vector2.SegmentToSegmentIntersection(point, new Vector2(1000,1000), edgeStart, edgeEnd, ref temp))
+               if(Vector2.SegmentToSegmentIntersection(point, new Vector2(10000,10000), edgeStart, edgeEnd, ref temp))
                 intersectionsCount++;
             }
 
