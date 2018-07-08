@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\p.popov\.Rider2017.3\system\resharper-host\local\Transient\ReSharperHost\v11\SolutionCaches\_PathFinder2D.1519564411.00" t="ExcludeRecursive" />
-    <e p="C:\Users\p.popov\Desktop\PathFinder2D" t="IncludeFlat">
+    <e p="C:\Users\alkiviad\.Rider2017.3\system\resharper-host\local\Transient\ReSharperHost\v11\SolutionCaches\_PathFinder2D.-781006594.00" t="ExcludeRecursive" />
+    <e p="D:\projects\hackaton" t="IncludeFlat">
       <e p="packages" t="ExcludeRecursive" />
       <e p="PathFinder2D" t="IncludeRecursive">
         <e p="App.config" t="Include" />

@@ -9,7 +9,6 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
 
 
         public static List<IntersectedContour> GetIntersectedContours(Vector2 start, Vector2 goal, Contour[] contours) {
-            if (contours == null) throw new ArgumentNullException(nameof(contours));
             var result = new List<IntersectedContour>();
             foreach (var contour in contours) {
                 Vector2? point = contour.GetNearestIntersection(start, goal);
@@ -17,6 +16,7 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
                     result.Add(new IntersectedContour(contour, point.Value));
                 }
             }
+
             return result;
         }
 
@@ -47,6 +47,20 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
             }
 
             return Math.Sign(value);
+        }
+
+        public static bool ContourVerticesLayOnSegment(Segment segment, Contour contour) {
+            foreach (var vertex in contour.Vertices) {
+                if (vertex.Equals(segment.EndPoint) || vertex.Equals(segment.StartPoint)) {
+                    continue;
+                }
+
+                if (segment.ContainsPoint(vertex)) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

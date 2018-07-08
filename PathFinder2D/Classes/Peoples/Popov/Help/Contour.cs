@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Windows;
@@ -18,6 +19,8 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
         }
 
         public IList<Segment> Segments => _segments;
+
+        public IEnumerable<Vector2> Vertices => _vertices;
 
         public Contour(Vector2[] vertices) {
             Id = _uniqueId;
