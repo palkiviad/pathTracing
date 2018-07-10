@@ -67,4 +67,7 @@
       <e p="PathFinder2D.sln" t="IncludeFlat" />
     </e>
   </component>
+  <component name="RiderRiderContentModelStore">
+    <excludedPaths />
+  </component>
 </project>
