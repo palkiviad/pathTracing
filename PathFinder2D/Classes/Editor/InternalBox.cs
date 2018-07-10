@@ -9,10 +9,18 @@ namespace PathFinder.Editor {
 
         public Vector2 LeftBottom { get; private set; }
         public Vector2 RightTop { get; private set; }
-        public float W => RightTop.x - LeftBottom.x;
-        public float H => RightTop.y - LeftBottom.y;
 
-        public Vector2 Center => (RightTop + LeftBottom) / 2.0f;
+        public float W {
+            get { return RightTop.x - LeftBottom.x; }
+        }
+
+        public float H {
+            get { return RightTop.y - LeftBottom.y; }
+        }
+
+        public Vector2 Center {
+            get { return (RightTop + LeftBottom) / 2.0f; }
+        }
 
         public InternalBox() {
             LeftBottom = new Vector2(float.MaxValue, float.MaxValue);

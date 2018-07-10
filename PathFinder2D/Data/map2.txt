@@ -1,4 +1,1 @@
 0,0|100,100|200,0|100,90
-translate=0,12
-translate=0,23
-translate=0,35

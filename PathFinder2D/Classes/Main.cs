@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
-using System.Linq;
+using System.Threading;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using PathFinder.Editor;
-using PathFinder.Peoples.Popov.Test;
 using Vector2 = PathFinder.Mathematics.Vector2;
 
 namespace PathFinder {
     internal sealed class Game : GameWindow {
+        
         private readonly IMap map = new Popov.MapV2();
+        
         private InternalObstaclesCollection obstaclesCollection;
         private readonly InternalSettings settings = new InternalSettings();
 
@@ -35,6 +37,7 @@ namespace PathFinder {
 
         private Game() : base(800, 600, GraphicsMode.Default, "Path Finder") {
             VSync = VSyncMode.On;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
         }
 
         private void LoadFile(string file) {
@@ -43,13 +46,10 @@ namespace PathFinder {
 
             obstaclesCollection = new InternalObstaclesCollection(file);
             map.Init(obstaclesCollection.Data);
-            
 
             OnResize();
 
             settings.CurrentFile = file;
-            ///PathDistanceCalculator.Calculate(map, start, end);
-           
         }
 
         protected override void OnLoad(EventArgs e) {
@@ -69,7 +69,6 @@ namespace PathFinder {
             GL.Disable(EnableCap.DepthTest);
 
             LoadFile(settings.CurrentFile);
-            
         }
 
         protected override void OnResize(EventArgs e) {
@@ -173,7 +172,6 @@ namespace PathFinder {
                 end = point2;
 
             settings.StartAndEnd = new[] {start, end};
-            //PathDistanceCalculator.Calculate(map, start, end);
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
@@ -217,27 +215,45 @@ namespace PathFinder {
 
                 // Обычными линиями - середина
                 // Если захотим вдруг изменить что-нибудь в дебаге
-                //stopwatch.Start();
+                
+              //  stopwatch.Restart();
                 IEnumerable<Vector2> path = map.GetPath(start, end);
-                //stopwatch.Stop();    
-                //Console.WriteLine("Time elapsed (ms): {0}", stopwatch.Elapsed.Milliseconds);
 
+              //  stopwatch.Stop();    
+            //    Console.WriteLine("Time elapsed (ms): {0}", stopwatch.Elapsed.TotalMilliseconds);
 
+                // Сами линии пути
+                {
+                    GL.Color3(0.5f, 1.0f, 0.5f);
+                    GL.LineWidth(3);
+                    GL.Begin(BeginMode.LineStrip);
+                    foreach (Vector2 vertex in path)
+                        GL.Vertex3(vertex.x, vertex.y, 0.0f);
+                    GL.End();
+                }
+                
+                // Точки на линии пути
+                {
+                    GL.Color3(1.0f, 1.0f, 0.5f);
+                    GL.PointSize(6);
+                    GL.Begin(BeginMode.Points);
+                    foreach (Vector2 vertex in path)
+                        GL.Vertex3(vertex.x, vertex.y, 0.0f);
+                    GL.End();
+                }
 
-                GL.Color3(0.5f, 1.0f, 0.5f);
-                GL.LineWidth(3);
-                GL.Begin(BeginMode.LineStrip);
-                foreach (Vector2 vertex in path)
-                    GL.Vertex3(vertex.x, vertex.y, 0.0f);
-                GL.End();
             }
             
-
-            GL.PointSize(8);
-            GL.Color3(1.0f, 0.5f, 0.5f);
             // Яркими точечками - начало и конец
+            GL.PointSize(12);
+            
+            GL.Color3(1.0f, 0.5f, 0.5f);
             GL.Begin(BeginMode.Points);
             GL.Vertex3(start.x, start.y, 0.0f);
+            GL.End();
+            
+            GL.Color3(0.5f, 0.5f, 1.0f);
+            GL.Begin(BeginMode.Points);
             GL.Vertex3(end.x, end.y, 0.0f);
             GL.End();
 

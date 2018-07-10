@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading;
 using PathFinder.Mathematics;
 using System.Globalization;
+using System.Linq;
 
 namespace PathFinder.Editor {
 
@@ -13,6 +14,7 @@ namespace PathFinder.Editor {
         private const string SettingsFile = "Data/Settings.dat";
 
         private Size size;
+
         public Size Size {
             get { return size; }
             set {
@@ -23,19 +25,22 @@ namespace PathFinder.Editor {
                 Save();
             }
         }
-        
+
         private Point location;
-        public Point Location { 
+
+        public Point Location {
             get { return location; }
             set {
-            if (value.X == location.X && value.Y == location.Y)
-                return;
+                if (value.X == location.X && value.Y == location.Y)
+                    return;
 
-            location = value;
-            Save();
-        } }
+                location = value;
+                Save();
+            }
+        }
 
         private string currentFile;
+
         public string CurrentFile {
             get { return currentFile; }
             set {
@@ -46,17 +51,18 @@ namespace PathFinder.Editor {
 
         private readonly object savingThreadLock = new object();
         private Thread savingThread;
-        
+
         private Vector2[] startAndEnd;
+
         public Vector2[] StartAndEnd {
             get { return startAndEnd; }
             set {
                 startAndEnd = value;
 
                 lock (savingThreadLock) {
-                    if (savingThread != null) 
+                    if (savingThread != null)
                         return;
-                    
+
                     savingThread = new Thread(() => {
                         Thread.Sleep(1000);
                         Save();
@@ -80,12 +86,17 @@ namespace PathFinder.Editor {
             CurrentFile = NextFile;
         }
 
-        public string NextFile => ShiftFile(true);
+        public string NextFile {
+            get { return ShiftFile(true); }
+        }
 
-        public string PreviousFile => ShiftFile(false);
+        public string PreviousFile {
+            get { return ShiftFile(false); }
+        }
 
         private string ShiftFile(bool forward) {
-            string[] files = Directory.GetFiles("Data", "*.txt");
+            string[] files = Directory.EnumerateFiles("Data", "*.*", SearchOption.TopDirectoryOnly)
+                .Where(s => s.EndsWith(".txt") || s.EndsWith(".svg")).ToArray(); 
 
             if (files.Length == 0)
                 return null;
@@ -111,18 +122,18 @@ namespace PathFinder.Editor {
             List<string> lines = new List<string>();
 
             lines.Add("Size=" + (Size.Width == 0 || Size.Height == 0 ? "800,600" : Size.Width + "," + Size.Height));
-            
-            if(location.X != int.MinValue && location.Y != int.MinValue)
+
+            if (location.X != int.MinValue && location.Y != int.MinValue)
                 lines.Add("Location=" + Location.X + "," + Location.Y);
-            
+
             if (CurrentFile != null)
                 lines.Add("CurrentFile=" + CurrentFile);
-            
-            if(StartAndEnd != null)
-                lines.Add("StartAndEnd=" + 
-                          StartAndEnd[0].x.ToString(CultureInfo.InvariantCulture) + "," + 
-                          StartAndEnd[0].y.ToString(CultureInfo.InvariantCulture)+ "," + 
-                          StartAndEnd[1].x.ToString(CultureInfo.InvariantCulture) + "," + 
+
+            if (StartAndEnd != null)
+                lines.Add("StartAndEnd=" +
+                          StartAndEnd[0].x.ToString(CultureInfo.InvariantCulture) + "," +
+                          StartAndEnd[0].y.ToString(CultureInfo.InvariantCulture) + "," +
+                          StartAndEnd[1].x.ToString(CultureInfo.InvariantCulture) + "," +
                           StartAndEnd[1].y.ToString(CultureInfo.InvariantCulture));
 
             File.WriteAllLines(SettingsFile, lines);
@@ -153,12 +164,13 @@ namespace PathFinder.Editor {
                         CurrentFile = GetValue(line, "CurrentFile=");
                         if (!File.Exists(CurrentFile))
                             currentFile = null;
-                    }else if (line.StartsWith("StartAndEnd=")) {
+                    } else if (line.StartsWith("StartAndEnd=")) {
                         string[] pathStr = GetValue(line, "StartAndEnd=").Split(',');
-                       
-                        startAndEnd = new []{
-                            new Vector2(float.Parse(pathStr[0], CultureInfo.InvariantCulture),float.Parse(pathStr[1], CultureInfo.InvariantCulture)),
-                            new Vector2(float.Parse(pathStr[2], CultureInfo.InvariantCulture),float.Parse(pathStr[3],CultureInfo.InvariantCulture))};
+
+                        startAndEnd = new[] {
+                            new Vector2(float.Parse(pathStr[0], CultureInfo.InvariantCulture), float.Parse(pathStr[1], CultureInfo.InvariantCulture)),
+                            new Vector2(float.Parse(pathStr[2], CultureInfo.InvariantCulture), float.Parse(pathStr[3], CultureInfo.InvariantCulture))
+                        };
                     }
                 }
             } catch (Exception) {

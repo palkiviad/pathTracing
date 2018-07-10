@@ -40,8 +40,45 @@ namespace PathFinder.Mathematics {
         public static float DistToSegment(Vector2 p, Vector2 v, Vector2 w) {
             return (float) Math.Sqrt(DistToSegmentSquared(p, v, w));
         }
+        
+        // В отличие от метода SegmentToSegmentIntersection задетекит и пересечение граничных точек.
+        // Т.е. сегменты [A, B] и [B, C] будут иметь пересечение.
+        public static bool SegmentToSegmentIntersectionWithBounds(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, ref Vector2 i) {
+            float s10_x = p1.x - p0.x;
+            float s10_y = p1.y - p0.y;
+            float s32_x = p3.x - p2.x;
+            float s32_y = p3.y - p2.y;
 
-        // Украдено и чутка дополнено. не будет детектить пересечений конечных точек отрезков!
+            var denom = s10_x * s32_y - s32_x * s10_y;
+            if (denom == 0)
+                return false; // Collinear
+            bool denomPositive = denom > 0;
+
+            float s02_x = p0.x - p2.x;
+            float s02_y = p0.y - p2.y;
+            var s_numer = s10_x * s02_y - s10_y * s02_x;
+            if (s_numer < 0 == denomPositive)
+                return false; // No collision
+
+            var t_numer = s32_x * s02_y - s32_y * s02_x;
+            if (t_numer < 0 == denomPositive)
+                return false; // No collision
+
+            if (s_numer >= denom == denomPositive || t_numer >= denom == denomPositive)
+                return false; // No collision
+            // Collision detected
+            var t = t_numer / denom;
+            
+            i.x = p0.x + t * s10_x;
+            i.y = p0.y + t * s10_y;
+
+            return true;
+        }
+        
+
+        // Украдено и чутка дополнено. не будет детектить пересечений конечных точек отрезков!!!
+        // Сегменты [A, B] и [B, C] не будут иметь пересечения!
+        // 
         // https://stackoverflow.com/questions/563198/whats-the-most-efficent-way-to-calculate-where-two-line-segments-intersect
         // хотя вроде бы где-то у меня был поприличнее алгоритм
         // (Вот бы он ещё работал правильно!)
@@ -129,25 +166,43 @@ namespace PathFinder.Mathematics {
             }
         }
 
-        public float magnitude => (float) Math.Sqrt(x * x + y * y);
+        public float magnitude { get{ return (float) Math.Sqrt(x * x + y * y);}}
 
-        public float sqrMagnitude => x * x + y * y;
+        public float sqrMagnitude {
+            get { return x * x + y * y; }
+        }
 
-        public static Vector2 zero => zeroVector;
+        public static Vector2 zero {
+            get { return zeroVector; }
+        }
 
-        public static Vector2 one => oneVector;
+        public static Vector2 one {
+            get { return oneVector; }
+        }
 
-        public static Vector2 up => upVector;
+        public static Vector2 up {
+            get { return upVector; }
+        }
 
-        public static Vector2 down => downVector;
+        public static Vector2 down {
+            get { return downVector; }
+        }
 
-        public static Vector2 left => leftVector;
+        public static Vector2 left {
+            get { return leftVector; }
+        }
 
-        public static Vector2 right => rightVector;
+        public static Vector2 right {
+            get { return rightVector; }
+        }
 
-        public static Vector2 positiveInfinity => positiveInfinityVector;
+        public static Vector2 positiveInfinity {
+            get { return positiveInfinityVector; }
+        }
 
-        public static Vector2 negativeInfinity => negativeInfinityVector;
+        public static Vector2 negativeInfinity {
+            get { return negativeInfinityVector; }
+        }
 
         public Vector2(float x, float y) {
             this.x = x;
