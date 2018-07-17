@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using PathFinder.Mathematics;
-using PathFinder.Peoples.Popov.Clasters;
+using PathFinder.Peoples.Popov.Clusters;
 
 namespace PathFinder2D.Classes.Peoples.Popov.Help {
-    public class PathTracerV2 {
+    public class PathTracer {
         private readonly List<IPolygon> polygons;
         private Vector2 _currentPoint;
         private readonly Vector2 _goal;
@@ -13,7 +13,7 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
         private IPolygon polygon;
         
         
-        public PathTracerV2(List<IPolygon> polygons, Vector2 goal, List<int> excludedPolygons) {
+        public PathTracer(List<IPolygon> polygons, Vector2 goal, List<int> excludedPolygons) {
             this.polygons = polygons;
             _goal = goal;
             this.excludedPolygons = excludedPolygons;

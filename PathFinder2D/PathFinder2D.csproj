@@ -63,14 +63,16 @@
     <Compile Include="Classes\Main.cs" />
     <Compile Include="Classes\Mathematics\Vector2.cs" />
     <Compile Include="Classes\Peoples\Pavlenko\Map\Map.cs" />
-    <Compile Include="Classes\Peoples\Popov\Clasters\PolygonsCluster.cs" />
-    <Compile Include="Classes\Peoples\Popov\Clasters\IPolygon.cs" />
-    <Compile Include="Classes\Peoples\Popov\Clasters\Polygon.cs" />
-    <Compile Include="Classes\Peoples\Popov\Help\ContoursCollection.cs" />
+    <Compile Include="Classes\Peoples\Popov\Help\MapBuilder.cs" />
+    <Compile Include="Classes\Peoples\Popov\Help\PathFinder.cs" />
+    <Compile Include="Classes\Peoples\Popov\Polygons\IPolygon.cs" />
+    <Compile Include="Classes\Peoples\Popov\Polygons\Polygon.cs" />
+    <Compile Include="Classes\Peoples\Popov\Polygons\PolygonsContainer.cs" />
     <Compile Include="Classes\Peoples\Popov\Help\PathTracer.cs" />
     <Compile Include="Classes\Peoples\Popov\Help\Segment.cs" />
     <Compile Include="Classes\Peoples\Popov\Help\Utils.cs" />
     <Compile Include="Classes\Peoples\Popov\Map\Map.cs" />
+    <Compile Include="Classes\Peoples\Popov\Map\MapV2.cs" />
     <Compile Include="Classes\Peoples\Popov\Test\PathDistanceCalculator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

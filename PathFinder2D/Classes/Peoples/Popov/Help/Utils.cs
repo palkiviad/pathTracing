@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using PathFinder.Mathematics;
-using PathFinder.Peoples.Popov.Clasters;
+using PathFinder.Peoples.Popov.Clusters;
 using PathFinder.Popov;
 
 namespace PathFinder2D.Classes.Peoples.Popov.Help {

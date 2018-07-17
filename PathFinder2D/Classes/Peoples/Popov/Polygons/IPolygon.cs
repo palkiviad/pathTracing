@@ -1,7 +1,7 @@
 ﻿using PathFinder.Mathematics;
 using PathFinder2D.Classes.Peoples.Popov.Help;
 
-namespace PathFinder.Peoples.Popov.Clasters {
+namespace PathFinder.Peoples.Popov.Clusters {
     public interface IPolygon {
         bool Contains(Vector2 point);
         Vector2? GetNearestIntersection(Segment segment);

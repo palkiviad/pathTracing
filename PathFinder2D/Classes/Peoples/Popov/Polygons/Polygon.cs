@@ -4,7 +4,7 @@ using System.Linq;
 using PathFinder.Mathematics;
 using PathFinder2D.Classes.Peoples.Popov.Help;
 
-namespace PathFinder.Peoples.Popov.Clasters {
+namespace PathFinder.Peoples.Popov.Clusters {
     
     public class Polygon : IPolygon {
         private static int _lastId;

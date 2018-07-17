@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using PathFinder.Mathematics;
-using PathFinder.Peoples.Popov.Clasters;
+using PathFinder.Peoples.Popov.Clusters;
 using PathFinder2D.Classes.Peoples.Popov.Help;
 
 namespace PathFinder.Popov {
-    public class MapV2 : IMap {
+    public class Map : IMap {
         private List<IPolygon> polygons;
         private Vector2 currentPoint;
         private Vector2 goal;
         private List<int> excludedPolygons;
-        private PathTracerV2 tracer;
+        private PathTracer tracer;
         
         private readonly Stopwatch stopwatch = new Stopwatch();
         private int calculateCount;
@@ -32,7 +32,7 @@ namespace PathFinder.Popov {
             var result = new List<Vector2>();
             currentPoint = start;
             goal = end;
-            tracer = new PathTracerV2(polygons, goal, excludedPolygons);
+            tracer = new PathTracer(polygons, goal, excludedPolygons);
             do {
                 result.Add(currentPoint);
                 var intersectedContours = Utils.GetIntersectedPolygons(currentPoint, goal, polygons);
