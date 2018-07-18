@@ -13,13 +13,13 @@ namespace PathFinder.Peoples.Popov.Clusters {
         public Vector2 TopLeft { get; private set; }
         public Vector2 TopRight { get; private set; }
 
-        public float MaxX => Math.Max(TopRight.x, BottomRight.x);
+        public float MaxX { get; private set; }
 
-        public float MaxY => Math.Max(TopRight.y, TopLeft.y);
+        public float MaxY { get; private set;}
 
-        public float MinX => Math.Min(TopLeft.x, BottomLeft.x);
+        public float MinX { get; private set;} 
 
-        public float MinY => Math.Min(BottomLeft.y, BottomRight.y);
+        public float MinY { get; private set;} 
         
         
         protected List<Vector2> vertices;
@@ -32,6 +32,10 @@ namespace PathFinder.Peoples.Popov.Clusters {
             _lastId++;
             _id = _lastId;
             Init(vertices);
+            MaxX = Math.Max(TopRight.x, BottomRight.x);
+            MaxY = Math.Max(TopRight.y, TopLeft.y);
+            MinX = Math.Min(TopLeft.x, BottomLeft.x);
+            MinY = Math.Min(BottomLeft.y, BottomRight.y);
         }
 
         public static void ResetId() {

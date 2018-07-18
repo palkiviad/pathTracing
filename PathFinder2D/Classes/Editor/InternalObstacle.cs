@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using OpenTK.Graphics.OpenGL;
 using PathFinder.Mathematics;
 
@@ -8,9 +7,21 @@ namespace PathFinder.Editor {
     public sealed class InternalObstacle {
 
         private BeginMode drawMode; // У нас - либо LineLoop, либо  Polygon, либо Triangles
+
+        // Вершины контура + 2 добавочные (в конец добавляем первую и вторую точку)
         private readonly Vector2[] vertices;
-        private List<List<int>> indices;
+
+        // Результат триангуляции - тройки вершин. Прелесть в том что мы точно знаем что они все лежат на контуре и что ребро между 0 и 2 вершиной - внутреннее
+        private InternalTriangle[] triangles;
+
+        // Индексы треугольников после триангуляции.
+      //  private int[] indices;
+
         public InternalBox Bounds { get; private set; }
+
+        public bool Initialized {
+            get { return triangles != null; }
+        }
 
         public Vector2[] Data {
             get {
@@ -18,6 +29,20 @@ namespace PathFinder.Editor {
                 Array.Copy(vertices, 0, result, 0, result.Length);
                 return result;
             }
+        }
+
+        // Просто восхитительный алгоритм определения направления контура!
+        // https://ru.wikipedia.org/wiki/Формула_площади_Гаусса 
+        private bool CV() {
+
+            float sum = 0;
+            for (int i = 0; i < vertices.Length - 2; i++)
+                sum += vertices[i].x * vertices[i + 1].y - vertices[i + 1].x * vertices[i].y;
+
+            if(sum >=0)
+                Console.WriteLine("Wrong contour direction! Should be CV!");
+            
+            return sum < 0;
         }
 
         public InternalObstacle(Vector2[] vertices) {
@@ -34,28 +59,100 @@ namespace PathFinder.Editor {
             Bounds = new InternalBox(vertices);
         }
 
-        public bool Contains(Vector2 point) {
+        // Это простенькая проверка и в случае её прохождения, дальше можно сегмент не проверять, он отличный.
+        private bool AllContourPointsOnOneSide(Vector2 point, Vector2 normal) {
+            bool first = true;
+            bool left = false;
 
-            Vector2 temp = Vector2.down;
-            int intersectionsCount = 0;
-            for (int i = 0; i < vertices.Length; i++) {
-                Vector2 edgeStart = vertices[i];
-                Vector2 edgeEnd = vertices[i+1 == vertices.Length  ? 0 : i+1];
+            for (int i = 0; i < vertices.Length - 2; i++) {
+                Vector2 a = vertices[i] - point;
 
-               if(Vector2.SegmentToSegmentIntersection(point, Bounds.RightTop+new Vector2(10,10), edgeStart, edgeEnd, ref temp))
-                intersectionsCount++;
+                if (first) {
+                    left = Vector2.Dot(a, normal) >= 0; //a.x * normal.y - a.y * normal.x >= 0;
+                    first = false;
+                } else {
+                    if (left != Vector2.Dot(a, normal) >= 0)
+                        return false;
+                }
             }
 
-            return intersectionsCount % 2 == 1;
+            return true;
         }
-        
+
+
+        public bool Intersects(IEnumerable<Vector2> path) {
+            // Сначала проверим дешёвое пересечение AABB с этим путём
+
+            bool intersectsWithAABB = false;
+            bool first = true;
+            Vector2 prev = Vector2.zero;
+
+
+            foreach (Vector2 point in path) {
+                if (first) {
+                    first = false;
+                    prev = point;
+                }
+
+                if (Bounds.ContainOrIntersects(prev, point)) {
+                    intersectsWithAABB = true;
+                    break;
+                }
+            }
+
+            // Временно выключим
+            //     if (!intersectsWithAABB)
+            //        return false;
+
+          //  Vector2 temp = Vector2.down;
+            // Раз мы здесь, значит нет пересечения с AABB и надо уже проверять умное пересечение с гранями
+            first = true;
+            prev = Vector2.zero;
+
+            foreach (Vector2 point in path) {
+                if (first) {
+                    first = false;
+                    prev = point;
+                    continue;
+                }
+
+                // у нас есть сегмент пути [prev, point] 
+                // получим его нормаль и посмотрим что все точки контура с одной из сторон от этого сегмента
+                if (AllContourPointsOnOneSide(prev, Vector2.Perpendicular(point - prev))) {
+                    prev = point;
+                    continue;
+                }
+
+                // Далее остаётся немного вариантов - и совпадение с внутренним ребром один из них 
+                for (int i = 0; i < triangles.Length; i++)
+                    if (triangles[i].TriangleSegmentIntersection(prev, point))
+                        return true;
+                
+                prev = point;
+            }
+
+            return false;
+        }
+
+        public bool Contains(Vector2 point) {
+
+            for (int i = 0; i < triangles.Length; i++) {
+                if (triangles[i].TrianglePointIntersection(point) == IntersectionType.Inside)
+                    return true;
+            }
+
+            return false;
+        }
+
         private bool HasSelfIntersections() {
             Vector2 temp = Vector2.zero;
             // Просто попарно перебираем все сегменты
             for (int i = 0; i < vertices.Length - 1; i++) {
                 for (int j = i + 1; j < vertices.Length - 1; j++) {
-                    if (Vector2.SegmentToSegmentIntersection(vertices[i], vertices[i + 1], vertices[j], vertices[j + 1], ref temp))
+                    if (Vector2.SegmentToSegmentIntersection(vertices[i], vertices[i + 1], vertices[j], vertices[j + 1], ref temp)) {
+                        Console.WriteLine("Error! Contour has self intersections!");
                         return true;
+                    }
                 }
             }
 
@@ -81,106 +178,114 @@ namespace PathFinder.Editor {
         }
 
         private void UpdateGeometry() {
+            
             // Проверяем наличие самопересечений
-            if (HasSelfIntersections())
+            if (HasSelfIntersections() || !CV()) {
                 drawMode = BeginMode.LineLoop;
-            else if (IsConvex())
-                drawMode = BeginMode.Polygon;
-            else {
+            } else {
+                Triangulate();
                 drawMode = BeginMode.Triangles;
-               // Triangulate();
-                TriangulateExt();
             }
         }
 
-        private int IndexOfFirstNonConvex(IList<int> ind) {
-            for (int i = 0; i < ind.Count; i++) {
-                int ind0 = ind[i - 1 < 0 ? ind.Count - 1 : i - 1];
-                int ind1 = ind[i];
-                int ind2 = ind[i + 1 >= ind.Count ? 0 : i + 1];
-
-                Vector2 a = vertices[ind0] - vertices[ind1];
-                Vector2 b = vertices[ind2] - vertices[ind1];
-
-                float cross = a.x * b.y - a.y * b.x;
-
-                if (cross < 0)
-                    return i;
-            }
-
-            return -1;
-        }
-        
-        // Возвращает индекс реззультата в переданном массиве индексов.
-        private int IndexOfFirstConvex(IList<int> ind) {
-            for (int i = 0; i < ind.Count; i++) {
-                int ind0 = ind[i - 1 < 0 ? ind.Count - 1 : i - 1];
-                int ind1 = ind[i];
-                int ind2 = ind[i + 1 >= ind.Count ? 0 : i + 1];
-
-                Vector2 a = vertices[ind0] - vertices[ind1];
-                Vector2 b = vertices[ind2] - vertices[ind1];
-
-                float cross = a.x * b.y - a.y * b.x;
-
-                if (cross >= 0)
-                    return i;
-            }
-
-            return -1;
-        }
+//        private int IndexOfFirstNonConvex(IList<int> ind) {
+//            for (int i = 0; i < ind.Count; i++) {
+//                int ind0 = ind[i - 1 < 0 ? ind.Count - 1 : i - 1];
+//                int ind1 = ind[i];
+//                int ind2 = ind[i + 1 >= ind.Count ? 0 : i + 1];
+//
+//                Vector2 a = vertices[ind0] - vertices[ind1];
+//                Vector2 b = vertices[ind2] - vertices[ind1];
+//
+//                float cross = a.x * b.y - a.y * b.x;
+//
+//                if (cross < 0)
+//                    return i;
+//            }
+//
+//            return -1;
+//        }
+//
+//        // Возвращает индекс результата в переданном массиве индексов.
+//        private int IndexOfFirstConvex(IList<int> ind) {
+//            for (int i = 0; i < ind.Count; i++) {
+//                int ind0 = ind[i - 1 < 0 ? ind.Count - 1 : i - 1];
+//                int ind1 = ind[i];
+//                int ind2 = ind[i + 1 >= ind.Count ? 0 : i + 1];
+//
+//                Vector2 a = vertices[ind0] - vertices[ind1];
+//                Vector2 b = vertices[ind2] - vertices[ind1];
+//
+//                float cross = a.x * b.y - a.y * b.x;
+//
+//                if (cross >= 0)
+//                    return i;
+//            }
+//
+//            return -1;
+//        }
 
         private bool Convex(int prev, int cur, int next) {
             Vector2 a = vertices[prev] - vertices[cur];
             Vector2 b = vertices[next] - vertices[cur];
 
-           return a.x * b.y - a.y * b.x >= 0;
-        }
-        
-        private static float Sign (Vector2 p1, Vector2 p2, Vector2 p3)
-        {
-            return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+            return a.x * b.y - a.y * b.x >= 0;
         }
 
-        private static bool PointInTriangle (Vector2 pt, Vector2 v1, Vector2 v2, Vector2 v3)
-        {
-            var b1 = Sign(pt, v1, v2) < 0.0f;
-            var b2 = Sign(pt, v2, v3) < 0.0f;
-            var b3 = Sign(pt, v3, v1) < 0.0f;
+
+
+  
+
+
+
+        // Внутри! Не на границе!
+//        private bool PointInTriangles(Vector2 point) {
+//            for (int i = 0; i < triangles.Length; i += 3) {
+//                if (PointInTriangle(point, triangles[i], triangles[i + 1], triangles[i + 2]))
+//                    return true;
+//            }
+//
+//            return false;
+//        }
+
+        private bool PointInTriangle(Vector2 pt, Vector2 v1, Vector2 v2, Vector2 v3) {
+            var b1 = InternalTriangle.Sign(pt, v1, v2) < 0.0f;
+            var b2 = InternalTriangle.Sign(pt, v2, v3) < 0.0f;
+            var b3 = InternalTriangle.Sign(pt, v3, v1) < 0.0f;
 
             return b1 == b2 && b2 == b3;
         }
         
-        private void TriangulateExt() {
-            
+        private void Triangulate() {
             // Начальный список всех индексов
             List<int> ind = new List<int>();
             for (int i = 0; i < vertices.Length - 2; i++)
                 ind.Add(i);
 
-            List<List<int>> resultIndices = new List<List<int>>();
-            
+            int indicesPosition = 0;
+        //    int[] resultIndices = new int[(vertices.Length - 4) * 3];
+            InternalTriangle[] resultTriangles = new InternalTriangle[(vertices.Length - 4)];
+
             while (ind.Count != 3) {
-                
                 bool found = false;
-                
+
+                int prevCount = ind.Count;
                 // Нам надо выпуклую найти вершину, для которой две её товарки дают ребро не имеющее пересечений с остальными рёбрами 
                 for (int j = 0; j < ind.Count; j++) {
-
                     int curIndex = ind[j];
                     int prevIndex = j - 1 < 0 ? ind[ind.Count - 1] : ind[j - 1];
                     int nextIndex = j + 1 >= ind.Count ? ind[0] : ind[j + 1];
 
                     if (!Convex(prevIndex, curIndex, nextIndex))
+                   //if (!Convex(nextIndex, curIndex, prevIndex))
                         continue;
 
                     // Проверяем что ни одна из точек не попала внутрь этого треугольника
                     for (int i = 0; i < ind.Count; i++) {
-                        
-                        if(ind[i] == curIndex || ind[i] == prevIndex || ind[i] == nextIndex)
+                        if (ind[i] == curIndex || ind[i] == prevIndex || ind[i] == nextIndex)
                             continue;
-                        
-                        if(PointInTriangle(vertices[ind[i]], vertices[prevIndex], vertices[curIndex], vertices[nextIndex]) ) {
+
+                        if (PointInTriangle(vertices[ind[i]], vertices[prevIndex], vertices[curIndex], vertices[nextIndex])) {
                             found = true;
                             break;
                         }
@@ -190,121 +295,52 @@ namespace PathFinder.Editor {
                         found = false;
                         continue;
                     }
+                   
+                    // Вершины нужно добавлять хитро - чтобы первые две грани были внешними, а последняя - 
+                    resultTriangles[indicesPosition] = new InternalTriangle(
+                        vertices[prevIndex], 
+                        vertices[curIndex], 
+                        vertices[nextIndex],
+                        !IsExternalEdge(prevIndex, curIndex),
+                        !IsExternalEdge(curIndex, nextIndex),
+                        !IsExternalEdge(nextIndex, prevIndex)
+                        );
+
+                    indicesPosition ++;
 
                     // её удаляем, а двух её товарок записываем в список вместе с ней
-                    resultIndices.Add(new List<int> {
-                        prevIndex,
-                        curIndex,
-                        nextIndex
-                    });
-
                     ind.RemoveAt(j);
                     break;
                 }
-                
-                if(found)
+
+                if (prevCount == ind.Count)
                     throw new Exception("Something wrong with contour or algorithm.");
             }
-            
+
             // И последняя порция
-            resultIndices.Add(ind);
+//            resultIndices[indicesPosition] = ind[0];
+//            resultIndices[indicesPosition + 1] = ind[1];
+//            resultIndices[indicesPosition + 2] = ind[2];
 
-            indices = resultIndices;
+            // Здесь важно не сделать огромной ошибки, нам нужно, чтобы 
+            resultTriangles[indicesPosition] = new InternalTriangle(
+                vertices[ind[0]],
+                vertices[ind[1]],
+                vertices[ind[2]],
+                !IsExternalEdge(ind[0], ind[1]),
+                !IsExternalEdge(ind[1], ind[2]),
+                !IsExternalEdge(ind[2], ind[0]));
+
+          //  indices = resultIndices;
+            triangles = resultTriangles;
         }
 
-        // Эта триангуляция неверно работает, там нужно реализовывать метод проверки того что сегмент лежит в пределах 
-        private void Triangulate() {
-            Vector2 temp = Vector2.zero;
+        private bool IsExternalEdge(int index1, int index2) {
+            if (index1 == 0 && index2 == vertices.Length - 3 ||
+                index1 == vertices.Length - 3 && index2 == 0)
+                return true;
 
-            List<List<int>> tempIndices = new List<List<int>>();
-
-            List<int> ind = new List<int>();
-            for (int i = 0; i < vertices.Length - 2; i++)
-                ind.Add(i);
-
-            tempIndices.Add(ind);
-
-            List<List<int>> resultIndices = new List<List<int>>();
-
-            while (tempIndices.Count != 0) {
-                ind = tempIndices.First();
-                tempIndices.Remove(ind);
-
-                int convexIndex = IndexOfFirstNonConvex(ind);
-                if (convexIndex == -1)
-                    continue;
-
-                // из вешины строим ребро, не являющее существующим и не пересекающее существующие
-                // перебираем вершины кроме convexIndex, convexIndex+1, convexIndex-1
-
-                int curIndex = ind[convexIndex];
-
-                int prevIndex = ind[convexIndex - 1 < 0 ? ind.Count - 1 : convexIndex - 1];
-                int nextIndex = ind[convexIndex + 1 >= ind.Count ? 0 : convexIndex + 1];
-
-                int indexOfOpposite = -1;
-                foreach (var opIndex in ind) {
-                    if (opIndex == curIndex || opIndex == prevIndex || opIndex == nextIndex)
-                        continue;
-
-                    bool hasIntersections = false;
-                    
-                    // Строим ребро и смотрим, есть ли пересечения с каким-либо из существующих рёбер контура.
-                    // Но этого условия мало, надо ещё убедиться что новообразованное ребро лежит внутри контура!
-                    for (int j = 0; j < ind.Count; j++) {
-                        int nex = j + 1 >= ind.Count ? 0 : j + 1;
-                        
-                        if (Vector2.SegmentToSegmentIntersection(vertices[ind[j]], vertices[ind[nex]], vertices[curIndex], vertices[opIndex], ref temp)) {
-                            hasIntersections = true;
-                            break;
-                        }
-                    }
-
-                    if (hasIntersections)
-                        continue;
-
-                    indexOfOpposite = opIndex;
-                    break;
-                }
-
-                if (indexOfOpposite == -1)
-                    throw new Exception("Failed to triangulate");
-
-                // разделяем tempVertices на два контура, первый идёт 
-                List<int> firstContour = CreateContour(ind, curIndex, indexOfOpposite);
-
-                if (IndexOfFirstNonConvex(firstContour) == -1) {
-                    resultIndices.Add(firstContour);
-                } else {
-                    tempIndices.Add(firstContour);
-                }
-
-                List<int> secondContour = CreateContour(ind, indexOfOpposite, curIndex);
-                if (IndexOfFirstNonConvex(secondContour) == -1) {
-                    resultIndices.Add(secondContour);
-                } else {
-                    tempIndices.Add(secondContour);
-                }
-            }
-
-            indices = resultIndices;
-        }
-
-        private static List<int> CreateContour(IList<int> contour, int startNodeIndex, int endNodeIndex) {
-            
-            List<int> result = new List<int>();
-            int startIndex = contour.IndexOf(startNodeIndex);
-            int endIndex = contour.IndexOf(endNodeIndex);
-            int len = endIndex > startIndex ? endIndex - startIndex - 1 : endIndex + (contour.Count - startIndex) - 1;
-            result.Add(startNodeIndex);
-            for (int i = 0; i < len; i++) {
-                startIndex++;
-                int ind = startIndex >= contour.Count ? startIndex - contour.Count : startIndex;
-                result.Add(contour[ind]);
-            }
-
-            result.Add(endNodeIndex);
-            return result;
+            return Math.Abs(index1 - index2) == 1;
         }
 
         public void Draw() {
@@ -316,20 +352,15 @@ namespace PathFinder.Editor {
                     GL.Vertex2(vertices[i].x, vertices[i].y);
                 GL.End();
             } else if (drawMode == BeginMode.Polygon) {
+                // Этот режим выбирается, если у нас контур самопересекающийся, или вообще какой-то неправильный.
                 GL.Color3(0.5f, 0.5f, 0.5f);
                 GL.Begin(BeginMode.Polygon);
                 for (int i = 0; i < vertices.Length - 2; i++)
                     GL.Vertex2(vertices[i].x, vertices[i].y);
                 GL.End();
             } else if (drawMode == BeginMode.Triangles) {
-                GL.Color3(0.5f, 0.5f, 0.5f);
-
-                foreach (var ind in indices) {
-                    GL.Begin(BeginMode.Polygon);
-                    foreach (var t in ind)
-                        GL.Vertex2(vertices[t].x, vertices[t].y);
-                    GL.End();
-                }
+                for (int i = 0; i < triangles.Length; i++)
+                    triangles[i].Draw();
             }
         }
     }

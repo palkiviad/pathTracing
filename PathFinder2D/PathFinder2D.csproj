@@ -14,6 +14,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
+    <LangVersion>5</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -58,10 +59,39 @@
     <Compile Include="Classes\Editor\InternalObstacle.cs" />
     <Compile Include="Classes\Editor\InternalObstaclesCollection.cs" />
     <Compile Include="Classes\Editor\InternalSettings.cs" />
+    <Compile Include="Classes\Editor\InternalTriangle.cs" />
     <Compile Include="Classes\Glu.cs" />
     <Compile Include="Classes\IMap.cs" />
     <Compile Include="Classes\Main.cs" />
+    <Compile Include="Classes\MainTest.cs" />
+    <Compile Include="Classes\Mathematics\Random.cs" />
     <Compile Include="Classes\Mathematics\Vector2.cs" />
+    <Compile Include="Classes\Peoples\Arkhipov\Map\Implementations\DumbRayPathfinder.cs" />
+    <Compile Include="Classes\Peoples\Arkhipov\Map\Map.cs" />
+    <Compile Include="Classes\Peoples\Arkhipov\Map\MathHelper.cs" />
+    <Compile Include="Classes\Peoples\Arkhipov\Map\Obstacle.cs" />
+    <Compile Include="Classes\Peoples\Arkhipov\Map\Segment.cs" />
+    <Compile Include="Classes\Peoples\Chermashentsev\Map\Map.cs" />
+    <Compile Include="Classes\Peoples\Dolgiy\Map\Map.cs" />
+    <Compile Include="Classes\Peoples\Galkin\Map\Bound.cs" />
+    <Compile Include="Classes\Peoples\Galkin\Map\Map.cs" />
+    <Compile Include="Classes\Peoples\Galkin\Map\Obstacle.cs" />
+    <Compile Include="Classes\Peoples\Kolesnikov\Map\Map.cs" />
+    <Compile Include="Classes\Peoples\Leyko\Map\Map.cs" />
+    <Compile Include="Classes\Peoples\Matusevich\Map\IntersectionDetails.cs" />
+    <Compile Include="Classes\Peoples\Matusevich\Map\Map.cs" />
+    <Compile Include="Classes\Peoples\Matusevich\Map\Node.cs" />
+    <Compile Include="Classes\Peoples\Matusevich\Map\Obstacle.cs" />
+    <Compile Include="Classes\Peoples\Matusevich\Map\Segment.cs" />
+    <Compile Include="Classes\Peoples\Mengaziev\Figure.cs" />
+    <Compile Include="Classes\Peoples\Mengaziev\Map\Map.cs" />
+    <Compile Include="Classes\Peoples\Minaev\Map\Map.cs" />
+    <Compile Include="Classes\Peoples\Minaev\Map\Shape.cs" />
+    <Compile Include="Classes\Peoples\Pavlenko\Finder\BoundingBox.cs" />
+    <Compile Include="Classes\Peoples\Pavlenko\Finder\BoundingCircle.cs" />
+    <Compile Include="Classes\Peoples\Pavlenko\Finder\Contour.cs" />
+    <Compile Include="Classes\Peoples\Pavlenko\Finder\Edge.cs" />
+    <Compile Include="Classes\Peoples\Pavlenko\Finder\Intersection.cs" />
     <Compile Include="Classes\Peoples\Pavlenko\Map\Map.cs" />
     <Compile Include="Classes\Peoples\Popov\Help\MapBuilder.cs" />
     <Compile Include="Classes\Peoples\Popov\Help\PathFinder.cs" />
@@ -74,6 +104,7 @@
     <Compile Include="Classes\Peoples\Popov\Map\Map.cs" />
     <Compile Include="Classes\Peoples\Popov\Map\MapV2.cs" />
     <Compile Include="Classes\Peoples\Popov\Test\PathDistanceCalculator.cs" />
+    <Compile Include="Classes\Peoples\Shishlov\Map\Map.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -90,14 +121,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Content Include="Classes\Peoples\Popov\Test\Results.txt" />
     <Content Include="Data\map1.txt" />
     <Content Include="Data\map2.txt" />
-    <Content Include="Data\map3.txt" />
     <Content Include="Data\map4.txt" />
     <Content Include="Data\map5.txt" />
     <Content Include="Data\Settings.dat" />
+    <Content Include="Data\map6.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

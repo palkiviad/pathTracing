@@ -75,6 +75,10 @@ namespace PathFinder.Mathematics {
             return true;
         }
         
+        public static bool SegmentToSegmentIntersectionWeak(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, ref Vector2 i) {
+            return SegmentToSegmentIntersection(p0, p1, p2, p3, ref i, 1e-3f);
+        }
+        
 
         // Украдено и чутка дополнено. не будет детектить пересечений конечных точек отрезков!!!
         // Сегменты [A, B] и [B, C] не будут иметь пересечения!
@@ -84,7 +88,7 @@ namespace PathFinder.Mathematics {
         // (Вот бы он ещё работал правильно!)
         // вернёт true, если пересечение имеет место и false в противном случае
         // в i запишутся координаты точки перессечения
-        public static bool SegmentToSegmentIntersection(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, ref Vector2 i) {
+        public static bool SegmentToSegmentIntersection(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, ref Vector2 i, float eps = kEpsilon) {
             float s10_x = p1.x - p0.x;
             float s10_y = p1.y - p0.y;
             float s32_x = p3.x - p2.x;
@@ -110,7 +114,7 @@ namespace PathFinder.Mathematics {
             // Collision detected
             var t = t_numer / denom;
 
-            if ( Math.Abs(t-1) < kEpsilon || Math.Abs(t) < kEpsilon)
+            if ( Math.Abs(t-1) < eps || Math.Abs(t) < eps)
                 return false;
             
             i.x = p0.x + t * s10_x;

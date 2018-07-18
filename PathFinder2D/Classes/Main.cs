@@ -14,9 +14,17 @@ using Vector2 = PathFinder.Mathematics.Vector2;
 
 namespace PathFinder {
     internal sealed class Game : GameWindow {
-        
-        private readonly IMap map = new Popov.MapV2();
-        
+
+        private readonly IMap[] pathFinders = {
+            
+            new Pavlenko.Map(),
+            new Popov.Map()
+        };
+
+        private int currentPathFinder;
+
+        private IMap map;// = new Pavlenko.Map();
+
         private InternalObstaclesCollection obstaclesCollection;
         private readonly InternalSettings settings = new InternalSettings();
 
@@ -45,7 +53,8 @@ namespace PathFinder {
                 throw new Exception("Cannot load data file");
 
             obstaclesCollection = new InternalObstaclesCollection(file);
-            map.Init(obstaclesCollection.Data);
+            
+            SwithPathFinder(currentPathFinder);
 
             OnResize();
 
@@ -68,7 +77,11 @@ namespace PathFinder {
             GL.ClearColor(0.7f, 0.7f, 0.7f, 0.0f);
             GL.Disable(EnableCap.DepthTest);
 
-            LoadFile(settings.CurrentFile);
+            if (!File.Exists(settings.CurrentFile)) {
+                settings.CurrentFile = null;
+                LoadFile(settings.NextFile);
+            } else
+                LoadFile(settings.CurrentFile);
         }
 
         protected override void OnResize(EventArgs e) {
@@ -105,7 +118,6 @@ namespace PathFinder {
 
             Vector2 center = box.Center;
 
-
             // если пути нет, проставим его ровно посереднине слева направо
             if (!pathSet) {
                 start = new Vector2(center.x - halfW * 1.1f, center.y);
@@ -131,7 +143,6 @@ namespace PathFinder {
             Glu.UnProject(new Vector3(20, 0, 0), ref point);
             Vector2 pointB = new Vector2(point.X, point.Y);
 
-
             selectionRadius = Vector2.Distance(pointA, pointB);
         }
 
@@ -145,15 +156,36 @@ namespace PathFinder {
         protected override void OnKeyDown(KeyboardKeyEventArgs e) {
             base.OnKeyDown(e);
 
-            if (e.Key == Key.Right) {
-                LoadFile(settings.NextFile);
-                pathSet = false;
-                OnResize();
-            } else if (e.Key == Key.Left) {
-                LoadFile(settings.PreviousFile);
-                pathSet = false;
-                OnResize();
-            }
+            switch (e.Key) {
+                case Key.Right:
+                    LoadFile(settings.NextFile);
+                    pathSet = false;
+                    OnResize();
+                    break;
+                case Key.Left:
+                    LoadFile(settings.PreviousFile);
+                    pathSet = false;
+                    OnResize();
+                    break;
+                case Key.Up:
+                    SwithPathFinder(currentPathFinder + 1);
+                    break;
+                case Key.Down:
+                    SwithPathFinder(currentPathFinder - 1);
+                    break;
+            } 
+        }
+
+        private void SwithPathFinder(int index) {
+            currentPathFinder = index < 0 ? pathFinders.Length+index : index >= pathFinders.Length ? index -pathFinders.Length : index ;
+            map = pathFinders[currentPathFinder];
+            map.Init(obstaclesCollection.Data);
+
+            UpdateWindowTitle();
+        }
+
+        private void UpdateWindowTitle() {
+            Title = "PathFinder2D [" +currentPathFinder +"] "+ map.GetType().Namespace.Replace("PathFinder.", "") + " (" + settings.CurrentFile + ")";
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e) {
@@ -209,51 +241,54 @@ namespace PathFinder {
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelview);
 
+            GL.Hint(HintTarget.LineSmoothHint, HintMode.Nicest);
+            
             obstaclesCollection.Draw();
 
-            if (!obstaclesCollection.Contains(start) && !obstaclesCollection.Contains(end)) {
-
+            if (obstaclesCollection.Initialized && !obstaclesCollection.Contains(start) && !obstaclesCollection.Contains(end)) {
                 // Обычными линиями - середина
                 // Если захотим вдруг изменить что-нибудь в дебаге
-                
-              //  stopwatch.Restart();
+
+                //  stopwatch.Restart();
                 IEnumerable<Vector2> path = map.GetPath(start, end);
 
-              //  stopwatch.Stop();    
-            //    Console.WriteLine("Time elapsed (ms): {0}", stopwatch.Elapsed.TotalMilliseconds);
+                if (obstaclesCollection.Intersects(path))
+                    Console.WriteLine("Intersection");
+
+                //  stopwatch.Stop();    
+                //  Console.WriteLine("Time elapsed (ms): {0}", stopwatch.Elapsed.TotalMilliseconds);
 
                 // Сами линии пути
                 {
                     GL.Color3(0.5f, 1.0f, 0.5f);
                     GL.LineWidth(3);
-                    GL.Begin(BeginMode.LineStrip);
-                    foreach (Vector2 vertex in path)
-                        GL.Vertex3(vertex.x, vertex.y, 0.0f);
-                    GL.End();
-                }
-                
-                // Точки на линии пути
-                {
-                    GL.Color3(1.0f, 1.0f, 0.5f);
-                    GL.PointSize(6);
-                    GL.Begin(BeginMode.Points);
+                    GL.Begin(PrimitiveType.LineStrip);
                     foreach (Vector2 vertex in path)
                         GL.Vertex3(vertex.x, vertex.y, 0.0f);
                     GL.End();
                 }
 
+                // Точки на линии пути
+                {
+                    GL.Color3(1.0f, 1.0f, 0.5f);
+                    GL.PointSize(6);
+                    GL.Begin(PrimitiveType.Points);
+                    foreach (Vector2 vertex in path)
+                        GL.Vertex3(vertex.x, vertex.y, 0.0f);
+                    GL.End();
+                }
             }
-            
+
             // Яркими точечками - начало и конец
             GL.PointSize(12);
-            
+
             GL.Color3(1.0f, 0.5f, 0.5f);
-            GL.Begin(BeginMode.Points);
+            GL.Begin(PrimitiveType.Points);
             GL.Vertex3(start.x, start.y, 0.0f);
             GL.End();
-            
+
             GL.Color3(0.5f, 0.5f, 1.0f);
-            GL.Begin(BeginMode.Points);
+            GL.Begin(PrimitiveType.Points);
             GL.Vertex3(end.x, end.y, 0.0f);
             GL.End();
 
@@ -262,9 +297,13 @@ namespace PathFinder {
 
         [STAThread]
         private static void Main() {
-            using (Game game = new Game()) {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+
+      /*MainTest mainTest = new MainTest();
+       mainTest.TestMain();*/
+
+            using (Game game = new Game())
                 game.Run(30.0);
-            }
         }
     }
 }
