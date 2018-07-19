@@ -47,7 +47,7 @@ namespace PathFinder.Editor {
             return a.x * b.y - a.y * b.x;
         }
 
-        public bool PointOnSegment(Vector2 a, Vector2 v1, Vector2 v2) {
+        private static bool PointOnSegment(Vector2 a, Vector2 v1, Vector2 v2) {
             // Просто проверим пересечение проекций, выберем наибольшую проекцию
             float minProj;
             float maxProj;
@@ -55,49 +55,49 @@ namespace PathFinder.Editor {
             float posA;
 
 
-            if (Math.Abs(v1.x - v3.x) < 1e-4) {
+            if (Math.Abs(v1.x - v2.x) < 1e-4) {
                 // Мы вырождены по x
-                if (v1.y > v3.y) {
+                if (v1.y > v2.y) {
                     maxProj = v1.y;
-                    minProj = v3.y;
+                    minProj = v2.y;
                 } else {
                     minProj = v1.y;
-                    maxProj = v3.y;
+                    maxProj = v2.y;
                 }
 
                 posA = a.y;
 
             } else {
                 // Мы вырождены по y
-                if (v1.x > v3.x) {
+                if (v1.x > v2.x) {
                     maxProj = v1.x;
-                    minProj = v3.x;
+                    minProj = v2.x;
                 } else {
                     minProj = v1.x;
-                    maxProj = v3.x;
+                    maxProj = v2.x;
                 }
 
                 posA = a.x;
             }
 
-            return maxProj >= posA && minProj <= posA;
+            return maxProj > posA && minProj < posA;
         }
 
-        public bool SegmentsOverlap(Vector2 a, Vector2 b, Vector2 v1, Vector2 v2) {
+        private static bool SegmentsOverlap(Vector2 a, Vector2 b, Vector2 v1, Vector2 v2) {
             // Просто проверим пересечение проекций, выберем наибольшую проекцию
             float minProj;
             float maxProj;
             float maxPos;
             float minPos;
 
-            if (Math.Abs(v1.x - v3.x) < 1e-4) {
+            if (Math.Abs(v1.x - v2.x) < 1e-4) {
                 // Мы вырождены по x
-                if (v1.y > v3.y) {
+                if (v1.y > v2.y) {
                     maxProj = v1.y;
-                    minProj = v3.y;
+                    minProj = v2.y;
                 } else {
                     minProj = v1.y;
-                    maxProj = v3.y;
+                    maxProj = v2.y;
                 }
                 
                 if (a.y > b.y) {
@@ -109,12 +109,12 @@ namespace PathFinder.Editor {
                 }
             } else {
                 // Мы вырождены по y
-                if (v1.x > v3.x) {
+                if (v1.x > v2.x) {
                     maxProj = v1.x;
-                    minProj = v3.x;
+                    minProj = v2.x;
                 } else {
                     minProj = v1.x;
-                    maxProj = v3.x;
+                    maxProj = v2.x;
                 }
 
                 if (a.x > b.x) {
@@ -177,8 +177,6 @@ namespace PathFinder.Editor {
                 if (aType == IntersectionType.ThirdStraight)
                     return internal3;
             }
-            
-
             
             // любой степени совпадение с одним ребром допустимо если оно внешнее и недопустимое, если внутреннее
             if (aType == IntersectionType.FirstStraight && bType == IntersectionType.FirstStraight ||
@@ -249,11 +247,11 @@ namespace PathFinder.Editor {
             if (b2 == 0 && b3 == 0)
                 return IntersectionType.ThirdVertex;
             if (b1 == 0)
-                return IntersectionType.FirstStraight;
+                return PointOnSegment(pt,v1,v2) ? IntersectionType.FirstStraight :  IntersectionType.None;
             if (b2 == 0)
-                return IntersectionType.SecondStraight;
+                return PointOnSegment(pt,v2,v3) ? IntersectionType.SecondStraight :  IntersectionType.None;
             if (b3 == 0) {
-                return IntersectionType.ThirdStraight;
+                return PointOnSegment(pt,v3,v1) ? IntersectionType.ThirdStraight :  IntersectionType.None;
             }
 
             return b1 < 0 == b2 < 0 && b2 < 0 == b3 < 0 ? IntersectionType.Inside : IntersectionType.None;

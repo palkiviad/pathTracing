@@ -159,7 +159,7 @@ namespace PathFinder.Editor {
             return false;
         }
 
-        private bool IsConvex() {
+        private bool Convex() {
             // Фантастическая оптимизация
             if (vertices.Length < 4)
                 return true;
@@ -345,16 +345,17 @@ namespace PathFinder.Editor {
 
         public void Draw() {
             if (drawMode == BeginMode.LineLoop) {
+                // Этот режим выбирается, если у нас контур самопересекающийся, или вообще какой-то неправильный.
                 GL.LineWidth(3);
                 GL.Color3(1f, 0.0f, 0.0f);
-                GL.Begin(BeginMode.LineLoop);
+                GL.Begin(PrimitiveType.LineLoop);
                 for (int i = 0; i < vertices.Length - 2; i++)
                     GL.Vertex2(vertices[i].x, vertices[i].y);
                 GL.End();
             } else if (drawMode == BeginMode.Polygon) {
-                // Этот режим выбирается, если у нас контур самопересекающийся, или вообще какой-то неправильный.
+              
                 GL.Color3(0.5f, 0.5f, 0.5f);
-                GL.Begin(BeginMode.Polygon);
+                GL.Begin(PrimitiveType.Polygon);
                 for (int i = 0; i < vertices.Length - 2; i++)
                     GL.Vertex2(vertices[i].x, vertices[i].y);
                 GL.End();

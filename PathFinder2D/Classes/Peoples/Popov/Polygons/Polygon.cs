@@ -13,13 +13,13 @@ namespace PathFinder.Peoples.Popov.Clusters {
         public Vector2 TopLeft { get; private set; }
         public Vector2 TopRight { get; private set; }
 
-        public float MaxX { get; private set; }
+        public float MaxX { get; }
 
-        public float MaxY { get; private set;}
+        public float MaxY { get; }
 
-        public float MinX { get; private set;} 
+        public float MinX { get; } 
 
-        public float MinY { get; private set;} 
+        public float MinY { get; } 
         
         
         protected List<Vector2> vertices;
@@ -115,6 +115,9 @@ namespace PathFinder.Peoples.Popov.Clusters {
         }
 
         public Vector2? GetNearestIntersection(Segment segment) {
+            if (!LayInBounds(segment)) {
+                return null;
+            }
             var intersections = GetAllIntersections(segment);
             Vector2? result = null;
             var shortestDistance = float.MaxValue;
@@ -127,6 +130,18 @@ namespace PathFinder.Peoples.Popov.Clusters {
                 result = point;
             }
             return result;
+        }
+
+        private bool LayInBounds(Segment segment) {
+            var maxX = Math.Max(segment.StartPoint.x, segment.EndPoint.x);
+            var minX = Math.Min(segment.StartPoint.x, segment.EndPoint.x);
+            var maxY = Math.Max(segment.StartPoint.y, segment.EndPoint.y);
+            var minY = Math.Min(segment.StartPoint.y, segment.EndPoint.y);
+
+            if (MaxX < minX || MinX > maxX || MaxY < minY || MinY > maxY) {
+                return false;
+            }
+            return true;
         }
 
         private List<Vector2> GetAllIntersections(Segment segment) {

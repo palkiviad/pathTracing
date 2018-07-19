@@ -15,15 +15,18 @@ using Vector2 = PathFinder.Mathematics.Vector2;
 namespace PathFinder {
     internal sealed class Game : GameWindow {
 
-        private readonly IMap[] pathFinders = {
-            
+        public static readonly IMap[] pathFinders = {
+            new Arkhipov.Map(),
+            new Galkin.Map(),
+            new Matusevich.Map(),
             new Pavlenko.Map(),
-            new Popov.Map()
+            new Popov.Map(),
+            new Shishlov.Map()
         };
 
         private int currentPathFinder;
 
-        private IMap map;// = new Pavlenko.Map();
+        private IMap map;
 
         private InternalObstaclesCollection obstaclesCollection;
         private readonly InternalSettings settings = new InternalSettings();
@@ -54,11 +57,11 @@ namespace PathFinder {
 
             obstaclesCollection = new InternalObstaclesCollection(file);
             
+            settings.CurrentFile = file;
+            
             SwithPathFinder(currentPathFinder);
 
             OnResize();
-
-            settings.CurrentFile = file;
         }
 
         protected override void OnLoad(EventArgs e) {
@@ -246,8 +249,6 @@ namespace PathFinder {
             obstaclesCollection.Draw();
 
             if (obstaclesCollection.Initialized && !obstaclesCollection.Contains(start) && !obstaclesCollection.Contains(end)) {
-                // Обычными линиями - середина
-                // Если захотим вдруг изменить что-нибудь в дебаге
 
                 //  stopwatch.Restart();
                 IEnumerable<Vector2> path = map.GetPath(start, end);
@@ -299,11 +300,13 @@ namespace PathFinder {
         private static void Main() {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
-      /*MainTest mainTest = new MainTest();
-       mainTest.TestMain();*/
+            //Расскомментировать для запуска тестов
+            MainTest mainTest = new MainTest();
+            mainTest.TestMain();
 
-            using (Game game = new Game())
-                game.Run(30.0);
+            // Раскомментировать для запуска "редактора"
+//            using (Game game = new Game())
+//                game.Run(30.0);
         }
     }
 }

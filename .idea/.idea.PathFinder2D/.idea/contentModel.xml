@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\p.popov\.Rider2017.2\system\resharper-host\local\Transient\ReSharperHost\v10\SolutionCaches\_PathFinder2D.1519564411.00" t="ExcludeRecursive" />
-    <e p="C:\Users\p.popov\Desktop\PathFinder2D" t="IncludeFlat">
+    <e p="C:\Users\alkiviad\.Rider2017.3\system\resharper-host\local\Transient\ReSharperHost\v11\SolutionCaches\_PathFinder2D.-781006594.00" t="ExcludeRecursive" />
+    <e p="D:\projects\hackaton" t="IncludeFlat">
       <e p="packages" t="ExcludeRecursive" />
       <e p="PathFinder2D" t="IncludeRecursive">
         <e p="App.config" t="Include" />
@@ -13,15 +13,52 @@
             <e p="InternalObstacle.cs" t="Include" />
             <e p="InternalObstaclesCollection.cs" t="Include" />
             <e p="InternalSettings.cs" t="Include" />
+            <e p="InternalTriangle.cs" t="Include" />
           </e>
           <e p="Glu.cs" t="Include" />
           <e p="IMap.cs" t="Include" />
           <e p="Main.cs" t="Include" />
+          <e p="MainTest.cs" t="Include" />
           <e p="Mathematics" t="Include">
+            <e p="Random.cs" t="Include" />
             <e p="Vector2.cs" t="Include" />
           </e>
           <e p="Peoples" t="Include">
+            <e p="Arkhipov" t="Include">
+              <e p="Map" t="Include">
+                <e p="Implementations" t="Include">
+                  <e p="DumbRayPathfinder.cs" t="Include" />
+                </e>
+                <e p="Map.cs" t="Include" />
+                <e p="MathHelper.cs" t="Include" />
+                <e p="Obstacle.cs" t="Include" />
+                <e p="Segment.cs" t="Include" />
+              </e>
+            </e>
+            <e p="Galkin" t="Include">
+              <e p="Map" t="Include">
+                <e p="Bound.cs" t="Include" />
+                <e p="Map.cs" t="Include" />
+                <e p="Obstacle.cs" t="Include" />
+              </e>
+            </e>
+            <e p="Matusevich" t="Include">
+              <e p="Map" t="Include">
+                <e p="IntersectionDetails.cs" t="Include" />
+                <e p="Map.cs" t="Include" />
+                <e p="Node.cs" t="Include" />
+                <e p="Obstacle.cs" t="Include" />
+                <e p="Segment.cs" t="Include" />
+              </e>
+            </e>
             <e p="Pavlenko" t="Include">
+              <e p="Finder" t="Include">
+                <e p="BoundingBox.cs" t="Include" />
+                <e p="BoundingCircle.cs" t="Include" />
+                <e p="Contour.cs" t="Include" />
+                <e p="Edge.cs" t="Include" />
+                <e p="Intersection.cs" t="Include" />
+              </e>
               <e p="Map" t="Include">
                 <e p="Map.cs" t="Include" />
               </e>
@@ -45,17 +82,26 @@
               </e>
               <e p="Test" t="Include">
                 <e p="PathDistanceCalculator.cs" t="Include" />
-                <e p="Results.txt" t="Include" />
               </e>
+            </e>
+            <e p="Shishlov" t="Include">
+              <e p="Map" t="Include">
+                <e p="Map.cs" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="PeoplesRelease" t="Include">
+            <e p="Pavlenko" t="Include">
+              <e p="Map.cs" t="Include" />
             </e>
           </e>
         </e>
         <e p="Data" t="Include">
           <e p="map1.txt" t="Include" />
           <e p="map2.txt" t="Include" />
-          <e p="map3.txt" t="Include" />
           <e p="map4.txt" t="Include" />
           <e p="map5.txt" t="Include" />
+          <e p="map6.txt" t="Include" />
           <e p="Settings.dat" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive" />
@@ -65,6 +111,7 @@
           <e p="Resources.Designer.cs" t="Include" />
           <e p="Resources.resx" t="Include" />
         </e>
+        <e p="results" t="Include" />
       </e>
       <e p="PathFinder2D.sln" t="IncludeFlat" />
     </e>

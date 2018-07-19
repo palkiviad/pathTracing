@@ -11,12 +11,6 @@ namespace PathFinder {
 
     public class MainTest {
 
-        private IMap[] maps = {
-            
-            new Pavlenko.Map(),
-            new Popov.Map(),
-        };
-
         private class Obstacles {
             public readonly string file;
             public readonly InternalObstaclesCollection collection;
@@ -26,11 +20,9 @@ namespace PathFinder {
                 this.file = file;
                 this.collection = collection;
 
-                const int numberOfPoints = 5;
-
+                const int numberOfPoints = 100;
 
                 // Для каждого набора точек сгенерим список случайных конечных и начальных точек
-
 
                 InternalBox box = collection.Bounds;
                 Vector2 min = box.LeftBottom - new Vector2(box.W * 0.1f, box.H * 0.1f);
@@ -88,8 +80,11 @@ namespace PathFinder {
         public void TestMain() {
             Console.WriteLine("Started");
 
+            IMap[] maps = new IMap[Game.pathFinders.Length];
+            Array.Copy(Game.pathFinders, maps,maps.Length);
+            
             // Чтобы как-то не дай Бог никакой зависимости от порядка запуска не допустить, рандомизируем.
-            System.Random rnd = new System.Random();
+            Random rnd = new Random();
             maps = maps.OrderBy(x => rnd.Next()).ToArray();
 
             // Предзагрузим все файлы
@@ -263,13 +258,22 @@ namespace PathFinder {
                         // Интервал по файлу
                         Vector2 durationInterval = durationIntervals[file];
 
-                        float t = (float)((stat.duration - durationInterval.x) / (durationInterval.y - durationInterval.x));
-                        durationScore.Add(new Tuple<string, string, int>(user, file, 10-(int)(t*10)));
-                        
+                        if (durationInterval.x == durationInterval.y) {
+                            durationScore.Add(new Tuple<string, string, int>(user, file, 10));
+                        } else {
+
+                            float t = (float) ((stat.duration - durationInterval.x) / (durationInterval.y - durationInterval.x));
+                            durationScore.Add(new Tuple<string, string, int>(user, file, 10 - (int) (t * 10)));
+                        }
+
                         Vector2 lengthInterval = lengthIntervals[file];
-                        t = (float)((stat.length - lengthInterval.x) / (lengthInterval.y - lengthInterval.x));
-                        
-                        lengthScore.Add(new Tuple<string, string, int>(user, file, 10-(int)(t*10)));
+                        if (lengthInterval.x == lengthInterval.y) {
+                            lengthScore.Add(new Tuple<string, string, int>(user, file, 10));
+                        } else {
+
+                             float  t = (float) ((stat.length - lengthInterval.x) / (lengthInterval.y - lengthInterval.x));
+                            lengthScore.Add(new Tuple<string, string, int>(user, file, 10 - (int) (t * 10)));
+                        }
                     }
                 }
             }
@@ -288,7 +292,6 @@ namespace PathFinder {
                 
                 totalScores[user] = userDurationScores.Sum(p => p.Item3) + userLengthScores.Sum(p => p.Item3);
             }
-
 
             // А дальше - по фамилиям
             foreach (string user in users) {
