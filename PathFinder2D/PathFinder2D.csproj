@@ -86,8 +86,8 @@
     <Compile Include="Classes\Peoples\Pavlenko\Finder\Edge.cs" />
     <Compile Include="Classes\Peoples\Pavlenko\Finder\Intersection.cs" />
     <Compile Include="Classes\Peoples\Pavlenko\Map\Map.cs" />
+    <Compile Include="Classes\Peoples\Popov\Help\Finder.cs" />
     <Compile Include="Classes\Peoples\Popov\Help\MapBuilder.cs" />
-    <Compile Include="Classes\Peoples\Popov\Help\PathFinder.cs" />
     <Compile Include="Classes\Peoples\Popov\Polygons\IPolygon.cs" />
     <Compile Include="Classes\Peoples\Popov\Polygons\Polygon.cs" />
     <Compile Include="Classes\Peoples\Popov\Polygons\PolygonsContainer.cs" />
@@ -120,6 +120,7 @@
   <ItemGroup>
     <Content Include="Data\map1.txt" />
     <Content Include="Data\map2.txt" />
+    <Content Include="Data\map3.txt" />
     <Content Include="Data\map4.txt" />
     <Content Include="Data\map5.txt" />
     <Content Include="Data\map6.txt" />

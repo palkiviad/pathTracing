@@ -1,24 +1,39 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PathFinder.Mathematics;
+using PathFinder.Pavlenko;
 using PathFinder2D.Classes.Peoples.Popov.Help;
 
 namespace PathFinder.Peoples.Popov.Clusters {
     public class PolygonsContainer : IPolygon {
-        private Polygon _rectBounds;
+        private Polygon rectBounds;
         public PolygonsContainer[] ChildContainers { get; private set; }
-        public Polygon[] Polygons { get; private set; }
+        public IPolygon[] Polygons { get; private set; }
+        public PolygonsContainer Parent { get; private set; }
 
-        public PolygonsContainer(Vector2 bottomLeft, Vector2 topRight) {
+        public bool HasChildren {
+            get { return ChildContainers != null && ChildContainers.Length > 0; }
+        }
+
+        public bool HasParent {
+            get { return Parent != null; }
+        }
+
+        public PathTracer _tracer;
+
+
+        public PolygonsContainer(Vector2 bottomLeft, Vector2 topRight, PolygonsContainer parent) {
             var vertices = new Vector2 [4];
             vertices[0] = bottomLeft;
             vertices[1] = new Vector2(bottomLeft.x, topRight.y);
             vertices[2] = topRight;
             vertices[3] = new Vector2(topRight.x, bottomLeft.y);
-            _rectBounds = new Polygon(vertices);
+            rectBounds = new Polygon(vertices);
+            Parent = parent;
         }
 
         public bool Contains(Vector2 point) {
-            return _rectBounds.Contains(point);
+            return rectBounds.Contains(point);
         }
 
         public bool ContainsPolygon(Polygon polygon) {
@@ -27,8 +42,8 @@ namespace PathFinder.Peoples.Popov.Clusters {
                 var x = segment.StartPoint.x;
                 var y = segment.StartPoint.y;
                 if (
-                    x <= _rectBounds.MaxX && x >= _rectBounds.MinX
-                                          && y <= _rectBounds.MaxY && y >= _rectBounds.MinY
+                    x <= rectBounds.MaxX && x >= rectBounds.MinX
+                                         && y <= rectBounds.MaxY && y >= rectBounds.MinY
                 ) {
                     return true;
                 }
@@ -38,50 +53,54 @@ namespace PathFinder.Peoples.Popov.Clusters {
         }
 
         public Vector2? GetNearestIntersection(Segment segment) {
-            return _rectBounds.GetNearestIntersection(segment);
+            return rectBounds.GetNearestIntersection(segment);
         }
 
         public bool PointOnEdge(Vector2 point) {
-            return _rectBounds.PointOnEdge(point);
+            return rectBounds.PointOnEdge(point);
         }
 
         public int GetNearestSegmentIndex(Vector2 currentPoint) {
-            return _rectBounds.GetNearestSegmentIndex(currentPoint);
+            return rectBounds.GetNearestSegmentIndex(currentPoint);
         }
 
         public int GetId() {
-            return _rectBounds.GetId();
+            return rectBounds.GetId();
         }
 
         public Segment GetSegment(int index) {
-            return _rectBounds.GetSegment(index);
+            return rectBounds.GetSegment(index);
         }
 
         public int SegmentsCount() {
-            return _rectBounds.SegmentsCount();
+            return rectBounds.SegmentsCount();
         }
 
         public bool SegmentIntersectsVertex(Segment segment) {
-            return _rectBounds.SegmentIntersectsVertex(segment);
+            return rectBounds.SegmentIntersectsVertex(segment);
         }
 
         public bool LayOnSameHalfPlane(Segment segment) {
-            return _rectBounds.LayOnSameHalfPlane(segment);
+            return rectBounds.LayOnSameHalfPlane(segment);
+        }
+
+        public bool LayInSegmentBounds(Segment segment) {
+            return rectBounds.LayInSegmentBounds(segment);
         }
 
         public void CreateChildren() {
             ChildContainers = new PolygonsContainer[4];
-            var minX = _rectBounds.BottomLeft.x;
-            var minY = _rectBounds.BottomLeft.y;
-            var maxX = _rectBounds.TopRight.x;
-            var maxY = _rectBounds.TopRight.y;
+            var minX = rectBounds.MinX;
+            var minY = rectBounds.MinY;
+            var maxX = rectBounds.MaxX;
+            var maxY = rectBounds.MaxY;
             var halfX = minX + (maxX - minX) / 2;
             var halfY = minY + (maxY - minY) / 2;
 
-            ChildContainers[0] = new PolygonsContainer(new Vector2(minX, minY), new Vector2(halfX, halfY));
-            ChildContainers[1] = new PolygonsContainer(new Vector2(minX, halfY), new Vector2(halfX, maxY));
-            ChildContainers[2] = new PolygonsContainer(new Vector2(halfX, minY), new Vector2(maxX, halfY));
-            ChildContainers[3] = new PolygonsContainer(new Vector2(halfX, halfY), new Vector2(maxX, maxY));
+            ChildContainers[0] = new PolygonsContainer(new Vector2(minX, minY), new Vector2(halfX, halfY), this);
+            ChildContainers[1] = new PolygonsContainer(new Vector2(minX, halfY), new Vector2(halfX, maxY), this);
+            ChildContainers[2] = new PolygonsContainer(new Vector2(halfX, minY), new Vector2(maxX, halfY), this);
+            ChildContainers[3] = new PolygonsContainer(new Vector2(halfX, halfY), new Vector2(maxX, maxY), this);
         }
 
         private void AddPolygonsToChildren(Polygon[] polygons) {
@@ -119,8 +138,49 @@ namespace PathFinder.Peoples.Popov.Clusters {
             }
         }
 
-        public void FindPath(Vector2 start, Vector2 end, List<Vector2> result) {
-            
+        public bool HasPolygons() {
+            return Polygons != null && Polygons.Length > 0;
         }
+
+        public bool IsEmpty() {
+            if (ChildContainers != null) {
+                foreach (var container in ChildContainers) {
+                    if (!container.IsEmpty()) {
+                        return false;
+                    }
+                }
+            }
+
+            return !HasPolygons();
+        }
+
+        public PolygonsContainer GetChildContainedSegment(Vector2 start, Vector2 end) {
+            if (!HasChildren) {
+                throw new Exception("container has not any child!");
+            }
+            foreach (var container in ChildContainers) {
+                if (container.Contains(start) && container.Contains(end)) {
+                    return container;
+                }
+            }
+            return null;
+        }
+
+        public PolygonsContainer GetChildContainedPoint(Vector2 start) {
+            if (!HasChildren) {
+                throw new Exception("container has not any child!");
+            }
+            foreach (var container in ChildContainers) {
+                if (container.Contains(start)) {
+                    return container;
+                }
+            }
+            return null;
+        }
+
+       /* public override string ToString() {
+            return "Bounds is " + rectBounds.BottomLeft + "; " + rectBounds.TopRight;
+        }*/
+       
     }
 }

@@ -5,37 +5,29 @@ using PathFinder.Mathematics;
 using PathFinder2D.Classes.Peoples.Popov.Help;
 
 namespace PathFinder.Peoples.Popov.Clusters {
-    
+
     public class Polygon : IPolygon {
         private static int _lastId;
-        public Vector2 BottomLeft { get; private set; }
-        public Vector2 BottomRight { get; private set; }
-        public Vector2 TopLeft { get; private set; }
-        public Vector2 TopRight { get; private set; }
 
-        public float MaxX { get; }
+        public float MaxX { get; private set; }
 
-        public float MaxY { get; }
+        public float MaxY { get; private set; }
 
-        public float MinX { get; } 
+        public float MinX { get; private set; }
 
-        public float MinY { get; } 
-        
-        
+        public float MinY { get;  private set;}
+
+
         protected List<Vector2> vertices;
         private List<Segment> segments;
-        
+
         private int _id;
-        
+
 
         public Polygon(Vector2[] vertices) {
             _lastId++;
             _id = _lastId;
             Init(vertices);
-            MaxX = Math.Max(TopRight.x, BottomRight.x);
-            MaxY = Math.Max(TopRight.y, TopLeft.y);
-            MinX = Math.Min(TopLeft.x, BottomLeft.x);
-            MinY = Math.Min(BottomLeft.y, BottomRight.y);
         }
 
         public static void ResetId() {
@@ -43,40 +35,29 @@ namespace PathFinder.Peoples.Popov.Clusters {
         }
 
         private void Init(Vector2[] points) {
-            TopRight = new Vector2(float.MinValue, float.MinValue);
-            TopLeft = new Vector2(float.MaxValue, float.MinValue);
-            BottomLeft = new Vector2(float.MaxValue, float.MaxValue);
-            BottomRight = new Vector2(float.MinValue, float.MaxValue);
-            
+            MaxX = float.MinValue;
+            MaxY = float.MinValue;
+            MinX = float.MaxValue;
+            MinY = float.MaxValue;
             vertices = new List<Vector2>();
             segments = new List<Segment>();
             for (int i = 0; i < points.Length; i++) {
                 var point = points[i];
-                RefreshExtremeVertices(point);
+                RefreshBounds(point);
                 vertices.Add(point);
                 if (i > 0) {
-                    segments.Add(new Segment(points[i-1], point));
+                    segments.Add(new Segment(points[i - 1], point));
                 }
             }
-            segments.Add(new Segment(points [points.Length -1], points[0]));
+
+            segments.Add(new Segment(points[points.Length - 1], points[0]));
         }
 
-        private void RefreshExtremeVertices(Vector2 point) {
-            if (TopRight.x < point.x && TopRight.y < point.y) {
-                TopRight = point;
-            }
-
-            if (TopLeft.x > point.x && TopLeft.y < point.y) {
-                TopLeft = point;
-            }
-
-            if (BottomLeft.x > point.x && BottomLeft.y > point.y) {
-                BottomLeft = point;
-            }
-
-            if (BottomRight.x < point.x && BottomRight.y > point.y) {
-                BottomRight = point;
-            }
+        private void RefreshBounds(Vector2 point) {
+            MaxX = Math.Max(point.x, MaxX);
+            MaxY = Math.Max(point.y, MaxY);
+            MinX = Math.Min(point.x, MinX);
+            MinY = Math.Min(point.y, MinY);
         }
 
         public int GetNearestSegmentIndex(Vector2 currentPoint) {
@@ -87,6 +68,7 @@ namespace PathFinder.Peoples.Popov.Clusters {
                     break;
                 }
             }
+
             return startIndex;
         }
 
@@ -98,6 +80,7 @@ namespace PathFinder.Peoples.Popov.Clusters {
             if (segments.Count > index) {
                 return segments[index];
             }
+
             throw new ArgumentOutOfRangeException("segments count less than index " + index);
         }
 
@@ -111,28 +94,32 @@ namespace PathFinder.Peoples.Popov.Clusters {
             if (SegmentIntersectsVertex(segment)) {
                 return true;
             }
+
             return GetAllIntersections(segment).Count % 2 == 1;
         }
 
         public Vector2? GetNearestIntersection(Segment segment) {
-            if (!LayInBounds(segment)) {
+            if (!LayInSegmentBounds(segment)) {
                 return null;
             }
+
             var intersections = GetAllIntersections(segment);
             Vector2? result = null;
             var shortestDistance = float.MaxValue;
             foreach (var point in intersections) {
-                    var distance = Vector2.Distance(segment.StartPoint, point);
+                var distance = Vector2.Distance(segment.StartPoint, point);
                 if (shortestDistance <= distance) {
                     continue;
                 }
+
                 shortestDistance = distance;
                 result = point;
             }
+
             return result;
         }
 
-        private bool LayInBounds(Segment segment) {
+        public bool LayInSegmentBounds(Segment segment) {
             var maxX = Math.Max(segment.StartPoint.x, segment.EndPoint.x);
             var minX = Math.Min(segment.StartPoint.x, segment.EndPoint.x);
             var maxY = Math.Max(segment.StartPoint.y, segment.EndPoint.y);
@@ -141,17 +128,19 @@ namespace PathFinder.Peoples.Popov.Clusters {
             if (MaxX < minX || MinX > maxX || MaxY < minY || MinY > maxY) {
                 return false;
             }
+
             return true;
         }
 
         private List<Vector2> GetAllIntersections(Segment segment) {
-            var result = new List<Vector2>{};
+            var result = new List<Vector2> { };
             foreach (var item in segments) {
                 Vector2 intersection = Vector2.down;
                 if (Vector2.SegmentToSegmentIntersection(segment.StartPoint, segment.EndPoint, item.StartPoint, item.EndPoint, ref intersection)) {
                     result.Add(intersection);
                 }
             }
+
             return result;
         }
 
@@ -164,10 +153,12 @@ namespace PathFinder.Peoples.Popov.Clusters {
                 if (vertex.Equals(segment.EndPoint) || vertex.Equals(segment.StartPoint)) {
                     continue;
                 }
+
                 if (segment.ContainsPoint(vertex)) {
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -179,16 +170,17 @@ namespace PathFinder.Peoples.Popov.Clusters {
                 if (newSign == 0) {
                     continue;
                 }
+
                 if (sign != 0 && newSign != sign) {
                     return false;
                 }
 
                 sign = newSign;
             }
+
             return true;
-            
         }
 
-        
+
     }
 }

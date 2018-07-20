@@ -12,5 +12,6 @@ namespace PathFinder.Peoples.Popov.Clusters {
         int SegmentsCount();
         bool SegmentIntersectsVertex(Segment segment);
         bool LayOnSameHalfPlane(Segment segment);
+        bool LayInSegmentBounds(Segment segment);
     }
 }

@@ -65,8 +65,8 @@
             </e>
             <e p="Popov" t="Include">
               <e p="Help" t="Include">
+                <e p="Finder.cs" t="Include" />
                 <e p="MapBuilder.cs" t="Include" />
-                <e p="PathFinder.cs" t="Include" />
                 <e p="PathTracer.cs" t="Include" />
                 <e p="Segment.cs" t="Include" />
                 <e p="Utils.cs" t="Include" />
@@ -99,6 +99,7 @@
         <e p="Data" t="Include">
           <e p="map1.txt" t="Include" />
           <e p="map2.txt" t="Include" />
+          <e p="map3.txt" t="Include" />
           <e p="map4.txt" t="Include" />
           <e p="map5.txt" t="Include" />
           <e p="map6.txt" t="Include" />

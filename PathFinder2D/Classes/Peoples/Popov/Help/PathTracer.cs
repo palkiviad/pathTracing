@@ -6,14 +6,14 @@ using PathFinder.Peoples.Popov.Clusters;
 
 namespace PathFinder2D.Classes.Peoples.Popov.Help {
     public class PathTracer {
-        private readonly List<IPolygon> polygons;
+        private readonly IPolygon [] polygons;
         private Vector2 _currentPoint;
         private readonly Vector2 _goal;
-        private readonly List<int> excludedPolygons;
+        private readonly HashSet<int> excludedPolygons;
         private IPolygon polygon;
         
         
-        public PathTracer(List<IPolygon> polygons, Vector2 goal, List<int> excludedPolygons) {
+        public PathTracer(IPolygon[] polygons, Vector2 goal, HashSet<int> excludedPolygons) {
             this.polygons = polygons;
             _goal = goal;
             this.excludedPolygons = excludedPolygons;
@@ -31,11 +31,13 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
             excludedPolygons.Add(this.polygon.GetId());
             var forwardDistance = Utils.CalculatePathDistance(forwardPath);
             var backDistance = Utils.CalculatePathDistance(backPath);
-            var forwardValuableEffective = forwardDistance / backDistance < 0.99f;
+            var forwardValuableEffective = forwardDistance < backDistance /*< 0.99f*/;
             var shortestPath = forwardValuableEffective ? forwardPath : backPath;
             path.RemoveAt(path.Count -1);
             path.AddRange(shortestPath.GetRange(1, shortestPath.Count - 1));
-            return path.Last();
+            var last = path.Last();
+            path.Remove(last);
+            return last;
         }
 
         private List<Vector2> GetTracedSubPath(int startIndex, bool moveForward, List<Vector2> path) {
@@ -54,7 +56,7 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
                 Vector2? nextIntersection = polygon.GetNearestIntersection(new Segment(nextPoint, _goal));
                 if (!nextIntersection.HasValue && !polygon.SegmentIntersectsVertex(new Segment(nextPoint, _goal))) {
                     var intersectedContours = Utils.GetIntersectedPolygons(nextPoint, _goal, polygons);
-                    if (intersectedContours.All(item => excludedPolygons.IndexOf(item.Polygon.GetId()) < 0)) {
+                    if (intersectedContours.All(item => !excludedPolygons.Contains(item.Polygon.GetId()))) {
                         break;
                     }
                 }

@@ -77,9 +77,12 @@ namespace PathFinder {
 
         private readonly Stopwatch stopwatch = new Stopwatch();
 
-        public void TestMain() {
+        public void TestMain(out Vector2? start, out Vector2? end) {
             Console.WriteLine("Started");
-
+            start = null;
+            end = null;
+            double maxLength = 0;
+            string stupidMan = "";
             IMap[] maps = new IMap[Game.pathFinders.Length];
             Array.Copy(Game.pathFinders, maps,maps.Length);
             
@@ -140,7 +143,14 @@ namespace PathFinder {
                         if (!fail) {
                             durations.Add(stopwatch.Elapsed.TotalMilliseconds);
                             pointCounts.Add(path.Count());
-                            lengths.Add(Length(path));
+                            var length = Length(path);
+                            if (maxLength < length) {
+                                maxLength = length;
+                                start = obstacle.points[k];
+                                end = obstacle.points[k + 1];
+                                stupidMan = map.ToString();
+                            }
+                            lengths.Add(length);
                         }
 
                         successes[l] = !fail;
@@ -165,7 +175,9 @@ namespace PathFinder {
             }
 
             SaveStatistics();
-            
+            Console.WriteLine("stupid man is "+ stupidMan);
+            Console.WriteLine("max length is " + maxLength);
+            Console.WriteLine("start is " + start.Value + " end is " + end.Value);
             Console.WriteLine("Test finsihed.");
         }
 
@@ -344,7 +356,7 @@ namespace PathFinder {
             File.WriteAllText("records.html", sb.ToString());
         }
 
-        private static double Length(IEnumerable<Vector2> path) {
+        public static double Length(IEnumerable<Vector2> path) {
             double res = 0;
 
             bool first = true;
@@ -357,6 +369,7 @@ namespace PathFinder {
                 }
 
                 res += Vector2.Distance(prev, vertex);
+                prev = vertex;
             }
 
             return res;

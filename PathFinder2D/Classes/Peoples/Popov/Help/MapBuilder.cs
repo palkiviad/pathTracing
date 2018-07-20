@@ -31,7 +31,7 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
                 polygons[i] = polygon;
             }
 
-            var result = new PolygonsContainer(bottomLeft, topRight);
+            var result = new PolygonsContainer(bottomLeft, topRight, null);
             result.InitializeChildren(polygons);
             return result;
         }

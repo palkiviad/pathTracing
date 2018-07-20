@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Security.Cryptography;
 using PathFinder.Mathematics;
 using PathFinder.Peoples.Popov.Clusters;
@@ -27,15 +28,37 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
             return fullPath;
         }
 
-        public static List<PolygonIntersection> GetIntersectedPolygons(Vector2 start, Vector2 goal, List<IPolygon> polygons) {
+        public static List<PolygonIntersection> GetIntersectedPolygons(Vector2 start, Vector2 goal, IPolygon[] polygons) {
             var result = new List<PolygonIntersection>();
-            foreach (var contour in polygons) {
+            for (var i = 0; i < polygons.Length; i++) {
+                var contour = polygons[i];
                 var point = contour.GetNearestIntersection(new Segment(start, goal));
                 if (point.HasValue) {
                     result.Add(new PolygonIntersection(contour, point.Value));
                 }
             }
 
+            return result;
+        }
+
+        public static IPolygon[] RemovePolygonsOutsideBounds(Vector2 start, Vector2 end, IList<IPolygon> polygons) {
+            var segment = new Segment(start, end);
+            var polygonsToRemove = new List<int>(polygons.Count);
+            for (var i = 0; i < polygons.Count; i++) {
+                var polygon = polygons[i];
+                if (!polygon.LayInSegmentBounds(segment)) {
+                    polygonsToRemove.Add(i);
+                }
+            }
+
+            var restCount = polygons.Count - polygonsToRemove.Count;
+            var result = new IPolygon [restCount];
+            var startIndex = 0;
+            for (var i = 0; i < polygons.Count; i++) {
+                if (polygonsToRemove.IndexOf(i) >= 0) continue;
+                result[startIndex] = polygons[i];
+                startIndex++;
+            }
             return result;
         }
 
@@ -50,5 +73,7 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
                 Intersection = intersection;
             }
         }
+        
+        
     }
 }

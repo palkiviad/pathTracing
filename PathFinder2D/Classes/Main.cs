@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using OpenTK;
 using OpenTK.Graphics;
@@ -16,11 +17,11 @@ namespace PathFinder {
     internal sealed class Game : GameWindow {
 
         public static readonly IMap[] pathFinders = {
+            new Popov.MapV2(), 
             new Arkhipov.Map(),
             new Galkin.Map(),
-            new Matusevich.Map(),
+            //new Matusevich.Map(),
             new Pavlenko.Map(),
-            new Popov.Map(),
             new Shishlov.Map()
         };
 
@@ -51,16 +52,23 @@ namespace PathFinder {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
         }
 
+        private Game(Vector2 startValue, Vector2 endValue) : base(800, 600, GraphicsMode.Default, "Path Finder") {
+            VSync = VSyncMode.On;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+            start = startValue;
+            end = endValue;
+            pathSet = true;
+        }
+
         private void LoadFile(string file) {
             if (file == null || !File.Exists(file))
                 throw new Exception("Cannot load data file");
 
             obstaclesCollection = new InternalObstaclesCollection(file);
-            
-            settings.CurrentFile = file;
-            
-            SwithPathFinder(currentPathFinder);
 
+            settings.CurrentFile = file;
+
+            SwithPathFinder(currentPathFinder);
             OnResize();
         }
 
@@ -71,7 +79,7 @@ namespace PathFinder {
             if (settings.Location.X != int.MinValue && settings.Location.Y != int.MinValue)
                 Location = new Point(settings.Location.X, settings.Location.Y);
 
-            if (settings.StartAndEnd != null) {
+            if (settings.StartAndEnd != null && !pathSet) {
                 start = settings.StartAndEnd[0];
                 end = settings.StartAndEnd[1];
                 pathSet = true;
@@ -145,7 +153,7 @@ namespace PathFinder {
 
             Glu.UnProject(new Vector3(20, 0, 0), ref point);
             Vector2 pointB = new Vector2(point.X, point.Y);
-
+            
             selectionRadius = Vector2.Distance(pointA, pointB);
         }
 
@@ -176,19 +184,25 @@ namespace PathFinder {
                 case Key.Down:
                     SwithPathFinder(currentPathFinder - 1);
                     break;
-            } 
+            }
         }
 
         private void SwithPathFinder(int index) {
-            currentPathFinder = index < 0 ? pathFinders.Length+index : index >= pathFinders.Length ? index -pathFinders.Length : index ;
+            currentPathFinder = index < 0 ? pathFinders.Length + index : index >= pathFinders.Length ? index - pathFinders.Length : index;
             map = pathFinders[currentPathFinder];
             map.Init(obstaclesCollection.Data);
-
+            var path = map.GetPath(start, end);
+            var length = MainTest.Length(path);
+            Console.WriteLine();
+            Console.WriteLine(length +" : LENGHT FOR " + map.ToString());
+            foreach (var item in path) {
+                Console.Write(item.ToString() + ";");
+            }
             UpdateWindowTitle();
         }
 
         private void UpdateWindowTitle() {
-            Title = "PathFinder2D [" +currentPathFinder +"] "+ map.GetType().Namespace.Replace("PathFinder.", "") + " (" + settings.CurrentFile + ")";
+            Title = "PathFinder2D [" + currentPathFinder + "] " + map.GetType().Namespace.Replace("PathFinder.", "") + " (" + settings.CurrentFile + ")";
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e) {
@@ -245,11 +259,10 @@ namespace PathFinder {
             GL.LoadMatrix(ref modelview);
 
             GL.Hint(HintTarget.LineSmoothHint, HintMode.Nicest);
-            
+
             obstaclesCollection.Draw();
 
             if (obstaclesCollection.Initialized && !obstaclesCollection.Contains(start) && !obstaclesCollection.Contains(end)) {
-
                 //  stopwatch.Restart();
                 IEnumerable<Vector2> path = map.GetPath(start, end);
 
@@ -302,11 +315,17 @@ namespace PathFinder {
 
             //Расскомментировать для запуска тестов
             MainTest mainTest = new MainTest();
-            mainTest.TestMain();
+            Vector2? start;
+            Vector2? end;
+            mainTest.TestMain(out start, out end);
+            /*if (start.HasValue && end.HasValue) {
+                using (Game game = new Game(start.Value, end.Value))
+                    game.Run(30.0);
+            }*/
 
-            // Раскомментировать для запуска "редактора"
-//            using (Game game = new Game())
-//                game.Run(30.0);
+             // Раскомментировать для запуска "редактора"
+             using (Game game = new Game())
+                    game.Run(30.0);
         }
     }
 }
