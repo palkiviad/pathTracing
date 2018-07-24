@@ -26,12 +26,17 @@ namespace PathFinder.Editor {
             LeftBottom = new Vector2(float.MaxValue, float.MaxValue);
             RightTop = new Vector2(float.MinValue, float.MinValue);
         }
-        
+
+        public InternalBox(Vector2 leftBottom, Vector2 rightTop) {
+            LeftBottom = leftBottom;
+            RightTop = rightTop;
+        }
+
         // Проверка на то что сегмент [a,b] пересекает, или лежит внутри AABB. Границу не будем учитывать.
         public bool ContainOrIntersects(Vector2 a, Vector2 b) {
             if (ContainsWithoutBounds(a) || ContainsWithoutBounds(b))
                 return true;
-            
+
             // А дальше посмотрим пересечение 4х сегментов c указанным
             Vector2 temp = Vector2.zero;
 
@@ -43,13 +48,13 @@ namespace PathFinder.Editor {
 
             if (Vector2.SegmentToSegmentIntersection(a, b, new Vector2(RightTop.x, RightTop.y), new Vector2(RightTop.x, LeftBottom.y), ref temp))
                 return true;
-            
+
             if (Vector2.SegmentToSegmentIntersection(a, b, new Vector2(RightTop.x, LeftBottom.y), new Vector2(LeftBottom.x, LeftBottom.y), ref temp))
                 return true;
-            
+
             return false;
         }
-        
+
         public bool ContainsWithoutBounds(Vector2 point) {
             return LeftBottom.x < point.x && RightTop.x > point.x &&
                    LeftBottom.y < point.y && RightTop.y > point.y;

@@ -11,7 +11,8 @@ namespace PathFinder.Editor {
 
     public class InternalSettings {
 
-        private const string SettingsFile = "Data/Settings.dat";
+        public const string SettingsDir = "ReleaseData";
+        private const string SettingsFile = SettingsDir+ "/Settings.dat";
 
         private Size size;
 
@@ -95,7 +96,7 @@ namespace PathFinder.Editor {
         }
 
         private string ShiftFile(bool forward) {
-            string[] files = Directory.EnumerateFiles("Data", "*.*", SearchOption.TopDirectoryOnly)
+            string[] files = Directory.EnumerateFiles(SettingsDir, "*.*", SearchOption.TopDirectoryOnly)
                 .Where(s => s.EndsWith(".txt") || s.EndsWith(".svg")).ToArray(); 
 
             if (files.Length == 0)

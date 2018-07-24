@@ -48,7 +48,7 @@ namespace PathFinder.Arkhipov
             return true;
         }
 
-        public IEnumerable<Vector2> GetPathAroundObstacle(SegmentIntersection from, Vector2 closestTo)
+        public IList<Vector2> GetPathAroundObstacle(SegmentIntersection from, Vector2 closestTo)
         {
             int indexOfSegment = _segments.IndexOf(from.Segment);
             var clockwise = new List<Vector2>();
@@ -76,7 +76,7 @@ namespace PathFinder.Arkhipov
                 }
             }
             
-            var counterClockwise  = new List<Vector2>();
+            var counterClockwise = new List<Vector2>();
             finished = false;
             for (int i = indexOfSegment; i >= 0; --i)
             {

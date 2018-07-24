@@ -80,7 +80,7 @@ namespace PathFinder.Editor {
         }
 
 
-        public bool Intersects(IEnumerable<Vector2> path) {
+        public bool Intersects(IEnumerable<Vector2> path, ref Vector2 badSegmentStart, ref Vector2 badSegmentEnd) {
             // Сначала проверим дешёвое пересечение AABB с этим путём
 
             bool intersectsWithAABB = false;
@@ -124,10 +124,14 @@ namespace PathFinder.Editor {
                 }
 
                 // Далее остаётся немного вариантов - и совпадение с внутренним ребром один из них 
-                for (int i = 0; i < triangles.Length; i++)
-                    if (triangles[i].TriangleSegmentIntersection(prev, point))
+                for (int i = 0; i < triangles.Length; i++) {
+                    if (triangles[i].TriangleSegmentIntersection(prev, point)) {
+                        badSegmentStart = prev;
+                        badSegmentEnd = point;
                         return true;
-                
+                    }
+                }
+
                 prev = point;
             }
 
@@ -135,12 +139,10 @@ namespace PathFinder.Editor {
         }
 
         public bool Contains(Vector2 point) {
-
-            for (int i = 0; i < triangles.Length; i++) {
-                if (triangles[i].TrianglePointIntersection(point) == IntersectionType.Inside)
+            for (int i = 0; i < triangles.Length; i++)
+                if (triangles[i].Contains(point))
                     return true;
-            }
-
+            
             return false;
         }
 
@@ -225,33 +227,19 @@ namespace PathFinder.Editor {
 //            return -1;
 //        }
 
+        // Угол строго меньше 180 градусов
         private bool Convex(int prev, int cur, int next) {
             Vector2 a = vertices[prev] - vertices[cur];
             Vector2 b = vertices[next] - vertices[cur];
 
-            return a.x * b.y - a.y * b.x >= 0;
+            return a.x * b.y - a.y * b.x > 0;
         }
 
-
-
-  
-
-
-
-        // Внутри! Не на границе!
-//        private bool PointInTriangles(Vector2 point) {
-//            for (int i = 0; i < triangles.Length; i += 3) {
-//                if (PointInTriangle(point, triangles[i], triangles[i + 1], triangles[i + 2]))
-//                    return true;
-//            }
-//
-//            return false;
-//        }
-
-        private bool PointInTriangle(Vector2 pt, Vector2 v1, Vector2 v2, Vector2 v3) {
-            var b1 = InternalTriangle.Sign(pt, v1, v2) < 0.0f;
-            var b2 = InternalTriangle.Sign(pt, v2, v3) < 0.0f;
-            var b3 = InternalTriangle.Sign(pt, v3, v1) < 0.0f;
+        // Точка внутри или на границе.
+        private static bool PointInTriangle(Vector2 pt, Vector2 v1, Vector2 v2, Vector2 v3) {
+            bool b1 = InternalTriangle.Sign(pt, v1, v2) <= 0.0f;
+            bool b2 = InternalTriangle.Sign(pt, v2, v3) <= 0.0f;
+            bool b3 = InternalTriangle.Sign(pt, v3, v1) <= 0.0f;
 
             return b1 == b2 && b2 == b3;
         }
@@ -264,7 +252,7 @@ namespace PathFinder.Editor {
 
             int indicesPosition = 0;
         //    int[] resultIndices = new int[(vertices.Length - 4) * 3];
-            InternalTriangle[] resultTriangles = new InternalTriangle[(vertices.Length - 4)];
+            InternalTriangle[] resultTriangles = new InternalTriangle[vertices.Length - 4];
 
             while (ind.Count != 3) {
                 bool found = false;
@@ -360,7 +348,15 @@ namespace PathFinder.Editor {
                     GL.Vertex2(vertices[i].x, vertices[i].y);
                 GL.End();
             } else if (drawMode == BeginMode.Triangles) {
-                for (int i = 0; i < triangles.Length; i++)
+                
+                GL.LineWidth(2);
+                GL.Color3(1f, 1.0f, 1.0f);
+                GL.Begin(PrimitiveType.LineLoop);
+                for (int i = 0; i < vertices.Length - 2; i++)
+                    GL.Vertex2(vertices[i].x, vertices[i].y);
+                GL.End();
+                
+              for (int i = 0; i < triangles.Length; i++)
                     triangles[i].Draw();
             }
         }

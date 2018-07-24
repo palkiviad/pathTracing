@@ -27,6 +27,21 @@ namespace PathFinder.Mathematics {
 
         public const float kEpsilon = 1E-05f;
 
+        // Украдено
+        // http://www.java2s.com/Code/CSharp/Development-Class/DistanceFromPointToLine.htm
+        public static double DistanceFromPointToLine(Vector2 point, Vector2 lineA, Vector2 lineB)
+        {
+            // given a line based on two points, and a point away from the line,
+            // find the perpendicular distance from the point to the line.
+            // see http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
+            // for explanation and defination.
+
+            float dx = lineB.x - lineA.x;
+            float dy = lineB.y - lineA.y;
+            
+            return Math.Abs(dx*(lineA.y - point.y) - dy*(lineA.x - point.x))/Math.Sqrt(dx*dx + dy*dy);
+        }
+        
         // Украдено 
         // https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
         public static float DistToSegmentSquared(Vector2 p, Vector2 v, Vector2 w) {

@@ -3,17 +3,24 @@ using PathFinder.Mathematics;
 
 namespace PathFinder2D.Classes.Peoples.Popov.Help {
     public class Segment {
+        private Vector2 _startPoint;
 
-        public Vector2 StartPoint { get; }
+        public Vector2 StartPoint {
+            get { return _startPoint; }
+        }
 
-        public Vector2 EndPoint { get; }
+        public Vector2 EndPoint {
+            get { return _endPoint; }
+        }
+
+        private Vector2 _endPoint;
 
         private float _distance;
 
         public Segment(Vector2 startPoint, Vector2 endPoint) {
-            StartPoint = startPoint;
-            EndPoint = endPoint;
-            _distance = Vector2.Distance(StartPoint, EndPoint);
+            _startPoint = startPoint;
+            _endPoint = endPoint;
+            _distance = Vector2.Distance(_startPoint, _endPoint);
         }
 
         /// <summary>
@@ -22,14 +29,14 @@ namespace PathFinder2D.Classes.Peoples.Popov.Help {
         /// <param name="point"></param>
         /// <returns></returns>
         public bool ContainsPoint(Vector2 point) {
-            float distance1 = Vector2.Distance(StartPoint, point);
-            float distance2 = Vector2.Distance(EndPoint, point);
+            float distance1 = Vector2.Distance(_startPoint, point);
+            float distance2 = Vector2.Distance(_endPoint, point);
             return Math.Abs(distance1 + distance2 - _distance) < 0.00003;
         }
 
         public bool EndPointCloser(Vector2 goal) {
-            float distance1 = Vector2.Distance(StartPoint, goal);
-            float distance2 = Vector2.Distance(EndPoint, goal);
+            float distance1 = Vector2.Distance(_startPoint, goal);
+            float distance2 = Vector2.Distance(_endPoint, goal);
             return distance2 < distance1;
         }
     }

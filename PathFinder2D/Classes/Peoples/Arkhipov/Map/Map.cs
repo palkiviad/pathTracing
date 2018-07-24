@@ -9,7 +9,7 @@ namespace PathFinder.Arkhipov
 
         public Map()
         {
-            _impl = new DumbRayPathfinder();
+            _impl = new RayPathfinder();
         }
 
         public void Init(Vector2[][] obstacles) 

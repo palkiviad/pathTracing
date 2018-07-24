@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -11,23 +10,51 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using PathFinder.Editor;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 using Vector2 = PathFinder.Mathematics.Vector2;
 
 namespace PathFinder {
     internal sealed class Game : GameWindow {
 
+//        public static readonly IMap[] pathFinders = {
+//            new Arkhipov.Map(),
+//            new Chermashentsev.Map(),
+//            new Dolgii_2018_07_11.Map(),
+//           new Galkin.Map(),
+//            new Kolesnikov.Map(),
+//            new Leyko.Map(),
+//            new Matusevich.Map(),
+//            new Mengaziev.Map(),
+//            new Minaev.Map(),
+//           new Pavlenko.Map(),
+//            new Popov.Map(),
+//            new Shishlov.Map()
+//        };
+        
         public static readonly IMap[] pathFinders = {
-            new Popov.MapV2(), 
-            new Arkhipov.Map(),
-            new Galkin.Map(),
-            //new Matusevich.Map(),
-            new Pavlenko.Map(),
-            new Shishlov.Map()
+           new Release.Dolgii.Map(),
+            
+           new Release.Kolesnikov.Map(),
+            
+           new Release.Matusevich.Map(),
+            
+           new Release.Mengaziev_1.Map(),
+           new Release.Mengaziev_2.Map(),
+           new Release.Mengaziev_3.Map(),
+            
+            new Release.Pavlenko.Map(),
+            
+            new Release.Popov.Map(),
+            
+          new Release.Shishlov.Map(),
+            
+          new Release.Suhih.Map()
         };
 
         private int currentPathFinder;
 
-        private IMap map;
+        private IMap map;// = new Pavlenko.Map();
 
         private InternalObstaclesCollection obstaclesCollection;
         private readonly InternalSettings settings = new InternalSettings();
@@ -45,30 +72,23 @@ namespace PathFinder {
         private Vector2 end;
 
         private DragMode dragMode = DragMode.None;
-        readonly Stopwatch stopwatch = new Stopwatch();
+        private readonly Stopwatch stopwatch = new Stopwatch();
 
         private Game() : base(800, 600, GraphicsMode.Default, "Path Finder") {
             VSync = VSyncMode.On;
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
         }
-
-        private Game(Vector2 startValue, Vector2 endValue) : base(800, 600, GraphicsMode.Default, "Path Finder") {
-            VSync = VSyncMode.On;
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-            start = startValue;
-            end = endValue;
-            pathSet = true;
-        }
-
+        
         private void LoadFile(string file) {
             if (file == null || !File.Exists(file))
                 throw new Exception("Cannot load data file");
 
             obstaclesCollection = new InternalObstaclesCollection(file);
-
+            
             settings.CurrentFile = file;
-
+            
             SwithPathFinder(currentPathFinder);
+
             OnResize();
         }
 
@@ -79,7 +99,7 @@ namespace PathFinder {
             if (settings.Location.X != int.MinValue && settings.Location.Y != int.MinValue)
                 Location = new Point(settings.Location.X, settings.Location.Y);
 
-            if (settings.StartAndEnd != null && !pathSet) {
+            if (settings.StartAndEnd != null) {
                 start = settings.StartAndEnd[0];
                 end = settings.StartAndEnd[1];
                 pathSet = true;
@@ -153,7 +173,7 @@ namespace PathFinder {
 
             Glu.UnProject(new Vector3(20, 0, 0), ref point);
             Vector2 pointB = new Vector2(point.X, point.Y);
-            
+
             selectionRadius = Vector2.Distance(pointA, pointB);
         }
 
@@ -184,25 +204,19 @@ namespace PathFinder {
                 case Key.Down:
                     SwithPathFinder(currentPathFinder - 1);
                     break;
-            }
+            } 
         }
 
         private void SwithPathFinder(int index) {
-            currentPathFinder = index < 0 ? pathFinders.Length + index : index >= pathFinders.Length ? index - pathFinders.Length : index;
+            currentPathFinder = index < 0 ? pathFinders.Length+index : index >= pathFinders.Length ? index -pathFinders.Length : index ;
             map = pathFinders[currentPathFinder];
             map.Init(obstaclesCollection.Data);
-            var path = map.GetPath(start, end);
-            var length = MainTest.Length(path);
-            Console.WriteLine();
-            Console.WriteLine(length +" : LENGHT FOR " + map.ToString());
-            foreach (var item in path) {
-                Console.Write(item.ToString() + ";");
-            }
+
             UpdateWindowTitle();
         }
 
         private void UpdateWindowTitle() {
-            Title = "PathFinder2D [" + currentPathFinder + "] " + map.GetType().Namespace.Replace("PathFinder.", "") + " (" + settings.CurrentFile + ")";
+            Title = "PathFinder2D [" +currentPathFinder +"] "+ map.GetType().Namespace.Replace("PathFinder.", "") + " (" + settings.CurrentFile + ")";
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e) {
@@ -259,18 +273,18 @@ namespace PathFinder {
             GL.LoadMatrix(ref modelview);
 
             GL.Hint(HintTarget.LineSmoothHint, HintMode.Nicest);
-
+           
+        //    tr.Draw();
+            
             obstaclesCollection.Draw();
 
             if (obstaclesCollection.Initialized && !obstaclesCollection.Contains(start) && !obstaclesCollection.Contains(end)) {
+
                 //  stopwatch.Restart();
                 IEnumerable<Vector2> path = map.GetPath(start, end);
 
-                if (obstaclesCollection.Intersects(path))
-                    Console.WriteLine("Intersection");
-
                 //  stopwatch.Stop();    
-                //  Console.WriteLine("Time elapsed (ms): {0}", stopwatch.Elapsed.TotalMilliseconds);
+                //    Console.WriteLine("Time elapsed (ms): {0}", stopwatch.Elapsed.TotalMilliseconds);
 
                 // Сами линии пути
                 {
@@ -291,6 +305,19 @@ namespace PathFinder {
                         GL.Vertex3(vertex.x, vertex.y, 0.0f);
                     GL.End();
                 }
+                
+                Vector2 badSegmentStart = Vector2.zero;
+                Vector2 badSegmentEnd = Vector2.zero;
+                if (obstaclesCollection.Intersects(path, ref badSegmentStart, ref badSegmentEnd)) {
+              //      Console.WriteLine("Intersection");
+                    
+                    GL.Color3(1f, 0.0f, 0.0f);
+                    GL.LineWidth(3);
+                    GL.Begin(PrimitiveType.Lines);
+                    GL.Vertex3(badSegmentStart.x, badSegmentStart.y, 0.0f);
+                    GL.Vertex3(badSegmentEnd.x, badSegmentEnd.y, 0.0f);
+                    GL.End();
+                }
             }
 
             // Яркими точечками - начало и конец
@@ -305,7 +332,7 @@ namespace PathFinder {
             GL.Begin(PrimitiveType.Points);
             GL.Vertex3(end.x, end.y, 0.0f);
             GL.End();
-
+            
             SwapBuffers();
         }
 
@@ -313,19 +340,176 @@ namespace PathFinder {
         private static void Main() {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
-            //Расскомментировать для запуска тестов
             MainTest mainTest = new MainTest();
-            Vector2? start;
-            Vector2? end;
-            mainTest.TestMain(out start, out end);
-            /*if (start.HasValue && end.HasValue) {
-                using (Game game = new Game(start.Value, end.Value))
-                    game.Run(30.0);
-            }*/
+            mainTest.TestMain();
 
-             // Раскомментировать для запуска "редактора"
-             using (Game game = new Game())
-                    game.Run(30.0);
+            // using (Game game = new Game())
+            // game.Run(30.0);
+        }
+
+        // Просто тестики массивов и листов
+        private static void ArrayListTest() {
+                        
+            
+            // последовательность случайных интов
+            const int count = 100000000;
+            double[] randoms = new double[count];
+            List<double> randomsList = new List<double>(count);
+            for (int i = 0; i < count; i++) {
+                randoms[i] = Mathematics.Random.Range(0, 10000);
+                randomsList.Add(randoms[i]);
+            }
+
+            const int repeats = 100;
+
+
+            double[] precize = new double[repeats];
+            double[] loop = new double[repeats];
+            double[] foreachvar = new double[repeats];
+            double[] foreachdouble = new double[repeats];
+            double[] linq = new double[repeats];
+           
+            double[] precizeList = new double[repeats];
+            double[] loopList = new double[repeats];
+            double[] foreachvarList = new double[repeats];
+            double[] foreachdoubleList = new double[repeats];
+            double[] linqList = new double[repeats];
+            
+            for (int j = 0; j < repeats; j++) {
+
+                Stopwatch stopwatch = new Stopwatch();
+                double sum;
+
+                {
+                    stopwatch.Restart();
+                    sum = 0;
+                    for (int i = 0; i < count; i++)
+                        sum += randoms[i];
+                    stopwatch.Stop();
+                    Console.WriteLine("Presize (ms): {0} | {1}", stopwatch.Elapsed.TotalMilliseconds, sum);
+
+                    precize[j] = stopwatch.Elapsed.TotalMilliseconds;
+                }
+
+
+                {
+                    stopwatch.Restart();
+                    sum = 0;
+                    for (int i = 0; i < randoms.Length; i++)
+                        sum += randoms[i];
+                    stopwatch.Stop();
+                    Console.WriteLine("Loop (ms): {0} | {1}", stopwatch.Elapsed.TotalMilliseconds, sum);
+                    
+                    loop[j] = stopwatch.Elapsed.TotalMilliseconds;
+                }
+                
+                {
+                    stopwatch.Restart();
+                    sum = 0;
+                    foreach (var i in randoms)
+                        sum += i;
+
+                    stopwatch.Stop();
+                    Console.WriteLine("Foreach var (ms): {0} | {1}", stopwatch.Elapsed.TotalMilliseconds, sum);
+                    
+                    foreachvar[j] = stopwatch.Elapsed.TotalMilliseconds;
+                }
+                
+                {
+                    stopwatch.Restart();
+                    sum = 0;
+                    foreach (double i in randoms)
+                        sum += i;
+
+                    stopwatch.Stop();
+                    Console.WriteLine("Foreach int (ms): {0} | {1}", stopwatch.Elapsed.TotalMilliseconds, sum);
+                    
+                    foreachdouble[j] = stopwatch.Elapsed.TotalMilliseconds;
+                }
+                
+                {
+                    stopwatch.Restart();
+                    sum = randoms.Sum();
+                    stopwatch.Stop();
+                   Console.WriteLine("Linq (ms): {0} | {1}", stopwatch.Elapsed.TotalMilliseconds, sum);
+                    
+                    linq[j] = stopwatch.Elapsed.TotalMilliseconds;
+                }
+                
+                //===================================================
+                // То же с листом
+                
+                {
+                    stopwatch.Restart();
+                    sum = 0;
+                    for (int i = 0; i < count; i++)
+                        sum += randomsList[i];
+                    stopwatch.Stop();
+                    Console.WriteLine("Presize (ms): {0} | {1}", stopwatch.Elapsed.TotalMilliseconds, sum);
+
+                    precizeList[j] = stopwatch.Elapsed.TotalMilliseconds;
+                }
+
+
+                {
+                    stopwatch.Restart();
+                    sum = 0;
+                    for (int i = 0; i < randoms.Length; i++)
+                        sum += randomsList[i];
+                    stopwatch.Stop();
+                    Console.WriteLine("Loop (ms): {0} | {1}", stopwatch.Elapsed.TotalMilliseconds, sum);
+                    
+                    loopList[j] = stopwatch.Elapsed.TotalMilliseconds;
+                }
+                
+                {
+                    stopwatch.Restart();
+                    sum = 0;
+                    foreach (var i in randomsList)
+                        sum += i;
+
+                    stopwatch.Stop();
+                    Console.WriteLine("Foreach var (ms): {0} | {1}", stopwatch.Elapsed.TotalMilliseconds, sum);
+                    
+                    foreachvarList[j] = stopwatch.Elapsed.TotalMilliseconds;
+                }
+                
+                {
+                    stopwatch.Restart();
+                    sum = 0;
+                    foreach (double i in randomsList)
+                        sum += i;
+
+                    stopwatch.Stop();
+                    Console.WriteLine("Foreach int (ms): {0} | {1}", stopwatch.Elapsed.TotalMilliseconds, sum);
+                    
+                    foreachdoubleList[j] = stopwatch.Elapsed.TotalMilliseconds;
+                }
+                
+                {
+                    stopwatch.Restart();
+                    sum = randomsList.Sum();
+                    stopwatch.Stop();
+                    Console.WriteLine("Linq (ms): {0} | {1}", stopwatch.Elapsed.TotalMilliseconds, sum);
+                    
+                    linqList[j] = stopwatch.Elapsed.TotalMilliseconds;
+                }
+            }
+            
+            Console.WriteLine(
+                "precize: " + precize.Average() + "\n" +
+                "loop: " + loop.Average() + "\n" +
+                "foreachdouble: " + foreachdouble.Average() + "\n" +
+                "foreachvar: " + foreachvar.Average() + "\n" +
+                "linq: " + linq.Average() + "\n\n" +
+                
+                "precizeList: " + precizeList.Average() + "\n" +
+                "loopList: " + loopList.Average() + "\n" +
+                "foreachdoubleList: " + foreachdoubleList.Average() + "\n" +
+                "foreachvarList: " + foreachvarList.Average() + "\n" +
+                "linqList: " + linqList.Average() + "\n" 
+                );
+
         }
     }
 }

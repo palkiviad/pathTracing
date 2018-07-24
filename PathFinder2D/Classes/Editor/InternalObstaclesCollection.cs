@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using PathFinder.Mathematics;
+using Random = PathFinder.Mathematics.Random;
 
 namespace PathFinder.Editor {
     public sealed class InternalObstaclesCollection {
@@ -35,12 +36,13 @@ namespace PathFinder.Editor {
         }
 
         // Метод проверки валидности пути
-        public bool Intersects(IEnumerable<Vector2> path) {
+        public bool Intersects(IEnumerable<Vector2> path, ref Vector2 badSegmentStart, ref Vector2 badSegmentEnd) {
             for (int i = 0; i < obstacles.Length; i++)
-                if (obstacles[i].Intersects(path))
+                if (obstacles[i].Intersects(path,ref badSegmentStart, ref badSegmentEnd))
                     return true;
             return false;
         }
+
 
         // Вспомогательный метод, чтобы передать данные уже в алгоритм нахождения пути
         public Vector2[][] Data {
@@ -90,10 +92,19 @@ namespace PathFinder.Editor {
                 if (trimmed.StartsWith("grid=")) {
                     string[] values = trimmed.Substring("grid=".Length, trimmed.Length - "grid=".Length).Split(',');
                     int countX = int.Parse(values[0], CultureInfo.InvariantCulture);
-                    int countY = int.Parse(values[0], CultureInfo.InvariantCulture);
+                    int countY = int.Parse(values[1], CultureInfo.InvariantCulture);
 
                     Vector2 delta = new Vector2(float.Parse(values[2], CultureInfo.InvariantCulture),
-                        float.Parse(values[3], CultureInfo.InvariantCulture));
+                                                float.Parse(values[3], CultureInfo.InvariantCulture));
+                    
+                    // И наконец, если есть ещё 4 и 5 - это означает что мы разрешаем случайные вращения, а сама точка - центр вращения
+                    bool randomRotation = false;
+                    Vector2 rotationShift = Vector2.zero;
+                    if (values.Length == 6) {
+                        randomRotation = true;
+                        rotationShift = new Vector2(float.Parse(values[4], CultureInfo.InvariantCulture),
+                                                    float.Parse(values[5], CultureInfo.InvariantCulture));
+                    }
 
                     InternalObstacle reference = result.Last();
 
@@ -101,8 +112,16 @@ namespace PathFinder.Editor {
                         for (int j = 1; j <= countY; j++) {
                             Vector2[] verts = reference.Data;
 
-                            for (int k = 0; k < verts.Length; k++)
-                                verts[k] = verts[k] + delta * new Vector2(i, j);
+                            float randomAngle = Random.Range(0, 360);
+                            
+                            for (int k = 0; k < verts.Length; k++) {
+
+                                if (!randomRotation) {
+                                    verts[k] = verts[k] + delta * new Vector2(i, j);
+                                } else {
+                                    verts[k] = (verts[k] +rotationShift).Rotate(randomAngle) - rotationShift  + delta * new Vector2(i, j);
+                                }
+                            }
 
                             result.Add(new InternalObstacle(verts));
                         }
@@ -185,62 +204,45 @@ namespace PathFinder.Editor {
             } else {
                 LoadTxt(lines);
             }
+            
+            // Также попробуем загрузить файл с областями
+            TryLoadAreas(fileName);
+        }
 
-            // Если мы хотим запустить тесты.
-            //Test(fileName);
+        public InternalBox[] areasA;
+        public InternalBox[] areasB;
+
+        private void TryLoadAreas(string fileName) {
+            // Сгенерим реально имя
+            string areaFIleName = fileName.Substring(0, fileName.Length - 3) + "areas";
+            if (!File.Exists(areaFIleName))
+                return;
+
+            List<InternalBox> areaA = new List<InternalBox>();
+            List<InternalBox> areaB = new List<InternalBox>();
+            
+            IEnumerable<string> lines = File.ReadLines(areaFIleName);
+            foreach (string line in lines) {
+                string trimmed = line.Trim();
+                if(trimmed.Length == 0 || trimmed.StartsWith("//"))
+                    continue;
+                   
+                string[] splitted = trimmed.Split('|');
+                
+                List<InternalBox> target = splitted[0].Trim() == "A" ? areaA : areaB;
+                target.Add(new InternalBox(
+                    new Vector2(float.Parse(splitted[1]), float.Parse(splitted[2])),
+                    new Vector2(float.Parse(splitted[3]), float.Parse(splitted[4]))
+                    ));
+            }
+
+            areasA = areaA.ToArray();
+            areasB = areaB.ToArray();
         }
 
         public void Draw() {
             for (int i = 0; i < obstacles.Length; i++)
                 obstacles[i].Draw();
-        }
-
-        // Минитестики, рассчитанные на определённые карты.
-        private void Test(string file) {
-//            // Это для первой карты
-            Dictionary<Vector2[], bool> tests = null;
-
-            // Это для второй карты (map2.txt)
-            if (file.EndsWith("map2.txt")) {
-                tests = new Dictionary<Vector2[], bool> {
-                    {new[] {new Vector2(-10, -10), new Vector2(10, 10)}, false},
-                    {new[] {new Vector2(100, 105), new Vector2(100, 80)}, true},
-                    {new[] {new Vector2(100, 105), new Vector2(100, 103)}, false},
-                    {new[] {new Vector2(100, 90), new Vector2(0, 0)}, false},
-                    {new[] {new Vector2(100, 95), new Vector2(0, 0)}, true},
-                    {new[] {new Vector2(100, 20), new Vector2(100, 100)}, true}
-                };
-            } else if (file.EndsWith("map1.txt")) {
-                tests = new Dictionary<Vector2[], bool> {
-                    // Совпадение с внешними рёбрами
-                    {new[] {new Vector2(0, 0), new Vector2(0, 100)}, false},
-                    {new[] {new Vector2(0, 100), new Vector2(100, 100)}, false},
-                    {new[] {new Vector2(100, 100), new Vector2(100, 0)}, false},
-                    {new[] {new Vector2(100, 0), new Vector2(0, 0)}, false},
-
-                    // Совпадение с внутренними рёбрами
-                    {new[] {new Vector2(0, 0), new Vector2(100, 100)}, true},
-                    {new[] {new Vector2(0, 100), new Vector2(100, 0)}, true},
-
-                    // Частичное совпадение и включение внешних рёбер 
-                    {new[] {new Vector2(0, -12), new Vector2(0, 12)}, false},
-                    {new[] {new Vector2(0, 82), new Vector2(0, 105)}, false},
-
-                    // За пределами с касанием вершин и рёбер
-                    {new[] {new Vector2(-10, 12), new Vector2(0, 12)}, false},
-                    {new[] {new Vector2(-10, 120), new Vector2(0, 100)}, false}
-                };
-            }
-
-            if (tests != null) {
-                int i = 0;
-                foreach (var test in tests) {
-                    bool res = Intersects(test.Key);
-                    if (res != test.Value)
-                        Console.WriteLine("Test " + i + " failed on " + file);
-                    i++;
-                }
-            }
         }
     }
 }
