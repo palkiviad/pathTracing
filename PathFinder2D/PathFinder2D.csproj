@@ -159,6 +159,13 @@
     <Content Include="Data\map5.txt" />
     <Content Include="Data\Settings.dat" />
     <Content Include="Data\map6.svg" />
+    <Content Include="ReleaseData\01_cube.txt" />
+    <Content Include="ReleaseData\02_nike.txt" />
+    <Content Include="ReleaseData\03_star.txt" />
+    <Content Include="ReleaseData\04_letterП.txt" />
+    <Content Include="ReleaseData\05_10000Сubes.txt" />
+    <Content Include="ReleaseData\07_10000Stars.txt" />
+    <Content Include="ReleaseData\Settings.dat" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

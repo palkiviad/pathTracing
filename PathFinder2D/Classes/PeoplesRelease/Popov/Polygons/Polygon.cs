@@ -135,6 +135,9 @@ namespace PathFinder.Release.Popov {
         private List<Vector2> GetAllIntersections(Segment segment) {
             var result = new List<Vector2> { };
             foreach (var item in segments) {
+                if (segment.StartPoint.Equals(new Vector2(20f, 80f))) {
+                    Console.Write("DFsdf");
+                }
                 Vector2 intersection = Vector2.down;
                 if (Vector2.SegmentToSegmentIntersection(segment.StartPoint, segment.EndPoint, item.StartPoint, item.EndPoint, ref intersection)) {
                     result.Add(intersection);

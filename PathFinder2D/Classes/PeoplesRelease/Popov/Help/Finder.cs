@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PathFinder.Mathematics;
 
@@ -53,13 +54,14 @@ namespace PathFinder.Release.Popov {
                         if (currentContainer == null) {
                             break;
                         }
-
                         continue;
                     }
                     currentContainer = intersection.Polygon as PolygonsContainer;
-                } else if (currentContainer.HasPolygons()) {
+                } else {
                     excludedPolygons.Add(currentContainer.GetId());
-                    TracePolygons(currentContainer.Polygons);
+                    if (currentContainer.HasPolygons()) {
+                       TracePolygons(currentContainer.Polygons);
+                    }
                     if (currentContainer.HasParent) {
                         currentContainer = currentContainer.Parent;
                     } else {
@@ -74,6 +76,7 @@ namespace PathFinder.Release.Popov {
             do {
                 var intersection = FindNearestPolygonIntersection(polygons);
                 if (intersection == null) {
+                    AddNearestreaBoundForContainer(polygons);
                     return;
                 }
 
@@ -83,6 +86,11 @@ namespace PathFinder.Release.Popov {
                 currentPath.Add(currentPoint);
             } while (true);
         }
+
+        private void AddNearestreaBoundForContainer(IPolygon[] polygons) {
+            //
+        }
+        
 
 
         private Utils.PolygonIntersection FindNearestPolygonIntersection(IList<IPolygon> polygons) {
