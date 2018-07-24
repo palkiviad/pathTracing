@@ -35,19 +35,17 @@ namespace PathFinder {
         public static readonly IMap[] pathFinders = {
           /* new Release.Dolgii.Map(),
             
-           new Release.Kolesnikov.Map(),
-            
-           new Release.Matusevich.Map(),
+           new Release.Kolesnikov.Map(),          
+           
             
            new Release.Mengaziev_1.Map(),
            new Release.Mengaziev_2.Map(),
            new Release.Mengaziev_3.Map(),
-            
-            new Release.Pavlenko.Map(),*/
-            
+            new Release.Pavlenko.Map(),
+            new Release.Matusevich.Map(),*/
             new Release.Popov.Map(),
             
-          /*new Release.Shishlov.Map(),
+        /*  new Release.Shishlov.Map(),
             
           new Release.Suhih.Map()*/
         };
@@ -263,14 +261,9 @@ namespace PathFinder {
             dragMode = DragMode.None;
         }
 
-        private bool rendered = false;
         protected override void OnRenderFrame(FrameEventArgs e) {
             base.OnRenderFrame(e);
-          /*  if (rendered) {
-                return;
-            }*/
 
-            rendered = true;
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             Matrix4 modelview = Matrix4.LookAt(Vector3.UnitZ, Vector3.Zero, Vector3.UnitY);
@@ -345,11 +338,11 @@ namespace PathFinder {
         private static void Main() {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
-            /*MainTest mainTest = new MainTest();
-            mainTest.TestMain();*/
+            MainTest mainTest = new MainTest();
+            mainTest.TestMain();
 
-             using (Game game = new Game())
-             game.Run(30.0);
+            // using (Game game = new Game())
+            // game.Run(30.0);
         }
 
         // Просто тестики массивов и листов

@@ -76,7 +76,6 @@ namespace PathFinder.Release.Popov {
             do {
                 var intersection = FindNearestPolygonIntersection(polygons);
                 if (intersection == null) {
-                    AddNearestreaBoundForContainer(polygons);
                     return;
                 }
 
@@ -86,12 +85,6 @@ namespace PathFinder.Release.Popov {
                 currentPath.Add(currentPoint);
             } while (true);
         }
-
-        private void AddNearestreaBoundForContainer(IPolygon[] polygons) {
-            //
-        }
-        
-
 
         private Utils.PolygonIntersection FindNearestPolygonIntersection(IList<IPolygon> polygons) {
             var polygonsInBounds = Utils.RemovePolygonsOutsideBounds(currentPoint, goal, polygons);

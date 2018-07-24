@@ -207,7 +207,18 @@
           <e p="03_star.txt" t="Include" />
           <e p="04_letterП.txt" t="Include" />
           <e p="05_10000Сubes.txt" t="Include" />
+          <e p="06_10000Nikes.txt" t="Include" />
           <e p="07_10000Stars.txt" t="Include" />
+          <e p="08_10000LettersП.txt" t="Include" />
+          <e p="09_10000CubesRotated.txt" t="Include" />
+          <e p="10_10000NikesRotated.txt" t="Include" />
+          <e p="11_10000StarsRotated.txt" t="Include" />
+          <e p="12_10000LettersПRotated.txt" t="Include" />
+          <e p="13_labyrinth.areas" t="Include" />
+          <e p="13_labyrinth.svg" t="Include" />
+          <e p="14_differentSizes.areas" t="Include" />
+          <e p="14_differentSizes.txt" t="Include" />
+          <e p="15_popov.txt" t="Include" />
           <e p="Settings.dat" t="Include" />
         </e>
       </e>

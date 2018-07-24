@@ -164,7 +164,18 @@
     <Content Include="ReleaseData\03_star.txt" />
     <Content Include="ReleaseData\04_letterП.txt" />
     <Content Include="ReleaseData\05_10000Сubes.txt" />
+    <Content Include="ReleaseData\06_10000Nikes.txt" />
     <Content Include="ReleaseData\07_10000Stars.txt" />
+    <Content Include="ReleaseData\08_10000LettersП.txt" />
+    <Content Include="ReleaseData\09_10000CubesRotated.txt" />
+    <Content Include="ReleaseData\10_10000NikesRotated.txt" />
+    <Content Include="ReleaseData\11_10000StarsRotated.txt" />
+    <Content Include="ReleaseData\12_10000LettersПRotated.txt" />
+    <Content Include="ReleaseData\13_labyrinth.areas" />
+    <Content Include="ReleaseData\13_labyrinth.svg" />
+    <Content Include="ReleaseData\14_differentSizes.areas" />
+    <Content Include="ReleaseData\14_differentSizes.txt" />
+    <Content Include="ReleaseData\15_popov.txt" />
     <Content Include="ReleaseData\Settings.dat" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

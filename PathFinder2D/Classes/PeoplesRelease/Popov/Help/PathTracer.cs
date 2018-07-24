@@ -73,7 +73,7 @@ namespace PathFinder.Release.Popov {
         }
 
         private void TryRemovePreviousPoint(IList<Vector2> path, Vector2 currentPoint) {
-            if (path.Count <= 1) {
+            if (path.Count <= 2) {
                 return;
             }
             var previous = path[path.Count - 2];
